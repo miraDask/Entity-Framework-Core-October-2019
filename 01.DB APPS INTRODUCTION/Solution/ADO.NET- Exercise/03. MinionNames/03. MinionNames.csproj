@@ -4,6 +4,7 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <RootNamespace>_03._MinionNames</RootNamespace>
+    <StartupObject>_03._MinionNames.StartUp</StartupObject>
   </PropertyGroup>
 
   <ItemGroup>
