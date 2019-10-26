@@ -70,7 +70,7 @@
 
         public void RemoveRange(IEnumerable<TEntity> entities)
         {
-            foreach (TEntity entity in this.Entities.ToArray())
+            foreach (TEntity entity in entities.ToArray())
             {
                 this.Remove(entity);
             }
