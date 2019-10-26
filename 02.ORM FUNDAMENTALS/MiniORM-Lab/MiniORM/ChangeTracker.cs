@@ -1,10 +1,10 @@
 ﻿namespace MiniORM
 {
     using System;
-    using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
     using System.Linq;
     using System.Reflection;
+    using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
 
     internal class ChangeTracker<T>
         where T : class, new()
