@@ -6,9 +6,9 @@
 
     public class StartUp
     {
-        public static void Main(string[] args)
+        public static void Main()
         {
-            var connectionString = @"Server=.\SQLEXPRESS;Database=MiniORM;Integrated Security=True";
+            var connectionString = "Server=DESKTOP-2HCAHJD\\SQLEXPRESS;Database=MiniORM;Integrated Security=True";
 
             var context = new SoftUniDbContext(connectionString);
 

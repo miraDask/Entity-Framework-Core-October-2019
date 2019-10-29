@@ -4,7 +4,7 @@
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
-    public class EmpoyeeProject
+    public class EmployeeProject
     {
         [Key]
         [ForeignKey(nameof(Employee))]
