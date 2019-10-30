@@ -4,6 +4,8 @@
     using System.Linq;
     using System.Text;
     using SoftUni.Data;
+    using SoftUni.Models;
+
     public class StartUp
     {
         public static void Main()
@@ -15,8 +17,11 @@
             //var employeesWithSalaryOver50000 = GetEmployeesWithSalaryOver50000(context);
             //Console.WriteLine(employeesWithSalaryOver50000);
 
-            var employeesFromResearchAndDevelopment = GetEmployeesFromResearchAndDevelopment(context);
-            Console.WriteLine(employeesFromResearchAndDevelopment);
+            //var employeesFromResearchAndDevelopment = GetEmployeesFromResearchAndDevelopment(context);
+            //Console.WriteLine(employeesFromResearchAndDevelopment);
+
+            var result = AddNewAddressToEmployee(context);
+            Console.WriteLine(result);
         }
 
         public static string GetEmployeesFullInformation(SoftUniContext context)
@@ -88,6 +93,43 @@
                 sb.AppendLine($"{e.FirstName} {e.LastName} from {e.Department} - ${e.Salary:f2}");
             }
 
+            return sb.ToString().TrimEnd();
+        }
+
+        public static string AddNewAddressToEmployee(SoftUniContext context)
+        {
+            
+            var newAddress = new Address()
+            {
+                AddressText = "Vitoshka 15",
+                TownId = 4
+            };
+
+            context.Addresses.Add(newAddress);
+
+            var employee = context.Employees
+                .Where(e => e.LastName == "Nakov")
+                .FirstOrDefault();
+
+            employee.Address = newAddress;
+
+            context.SaveChanges();
+
+            var sb = new StringBuilder();
+
+            var employees = context.Employees
+                .OrderByDescending(e => e.Address.AddressId)
+                .Select(e => new
+                {
+                    Address = e.Address.AddressText
+                })
+                .Take(10)
+                .ToArray();
+
+            foreach (var emp in employees)
+            {
+                sb.AppendLine(emp.Address);
+            }
             return sb.ToString().TrimEnd();
         }
     } 
