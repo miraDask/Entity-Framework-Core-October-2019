@@ -24,8 +24,11 @@
             //var updatedAddress = AddNewAddressToEmployee(context);
             //Console.WriteLine(updatedAddress);
 
-            var employeesWithProjectsInPeriod = GetEmployeesInPeriod(context);
-            Console.WriteLine(employeesWithProjectsInPeriod);
+            //var employeesWithProjectsInPeriod = GetEmployeesInPeriod(context);
+            //Console.WriteLine(employeesWithProjectsInPeriod);
+
+            var addressesByTown = GetAddressesByTown(context);
+            Console.WriteLine(addressesByTown);
 
         }
 
@@ -176,6 +179,31 @@
 
                     sb.AppendLine($"--{project.ProjectName} - {projectStartDate} - {projectEndDate}");
                 }
+            }
+
+            return sb.ToString().TrimEnd();
+        }
+
+        public static string GetAddressesByTown(SoftUniContext context)
+        {
+            var employees = context.Addresses
+                .OrderByDescending(a => a.Employees.Count)
+                .ThenBy(a => a.Town.Name)
+                .ThenBy(a => a.AddressText)
+                .Select(a => new
+                {
+                    a.AddressText,
+                    TownName = a.Town.Name,
+                    Count = a.Employees.Count
+                })
+                .Take(10)
+                .ToList();
+
+            var sb = new StringBuilder();
+
+            foreach (var e in employees)
+            {
+                sb.AppendLine($"{e.AddressText}, {e.TownName} - {e.Count} employees");
             }
 
             return sb.ToString().TrimEnd();
