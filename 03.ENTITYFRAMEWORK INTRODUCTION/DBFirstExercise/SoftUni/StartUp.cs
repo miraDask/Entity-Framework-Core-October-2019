@@ -33,8 +33,11 @@
             //var employee147 = GetEmployee147(context);
             //Console.WriteLine(employee147);
 
-            var departmentsWithMoreThan5Employees = GetLatestProjects(context);
-            Console.WriteLine(departmentsWithMoreThan5Employees);
+            //var departmentsWithMoreThan5Employees = GetLatestProjects(context);
+            //Console.WriteLine(departmentsWithMoreThan5Employees);
+
+            var employeesWithIncreasedSalary = IncreaseSalaries(context);
+            Console.WriteLine(employeesWithIncreasedSalary);
         }
 
         public static string GetEmployeesFullInformation(SoftUniContext context)
@@ -303,6 +306,43 @@
                 sb.AppendLine($"{project.Description}");
                 sb.AppendLine($"{project.StartDate.ToString("M/d/yyyy h:mm:ss tt", CultureInfo.InvariantCulture)}");
             }
+
+            return sb.ToString().TrimEnd();
+        }
+
+        public static string IncreaseSalaries(SoftUniContext context)
+        {
+            var sb = new StringBuilder();
+
+            var increasementRate = 1.12m;
+
+            var targetingDepartments = new string[]
+            {
+                "Engineering",
+                "Tool Design",
+                "Marketing",
+                "Information Services"
+            };
+
+            var targetingEmployees = context.Employees
+                .Where(e => targetingDepartments.Contains(e.Department.Name))
+                .ToList();
+
+            targetingEmployees.ForEach(te => te.Salary *= increasementRate);
+
+            context.SaveChanges();
+
+           var  employees = targetingEmployees
+                .OrderBy(e => e.FirstName)
+                .ThenBy(e => e.LastName)
+                .Select(e => new
+                {
+                    Name = e.FirstName + " " + e.LastName,
+                    e.Salary
+                })
+                .ToList();
+
+            employees.ForEach(e => sb.AppendLine($"{e.Name} (${e.Salary:f2})"));
 
             return sb.ToString().TrimEnd();
         }
