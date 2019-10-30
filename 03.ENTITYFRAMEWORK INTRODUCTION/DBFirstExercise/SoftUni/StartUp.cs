@@ -33,7 +33,7 @@
             //var employee147 = GetEmployee147(context);
             //Console.WriteLine(employee147);
 
-            var departmentsWithMoreThan5Employees = GetDepartmentsWithMoreThan5Employees(context);
+            var departmentsWithMoreThan5Employees = GetLatestProjects(context);
             Console.WriteLine(departmentsWithMoreThan5Employees);
         }
 
@@ -276,6 +276,32 @@
                 {
                     sb.AppendLine($"{emp.FullName} - {emp.JobTitle}");
                 }
+            }
+
+            return sb.ToString().TrimEnd();
+        }
+
+        public static string GetLatestProjects(SoftUniContext context)
+        {
+            var sb = new StringBuilder();
+
+            var projects = context.Projects
+                .OrderByDescending(p => p.StartDate)
+                .Take(10)
+                .OrderBy(p => p.Name)
+                .Select(p => new
+                {
+                    p.Name,
+                    p.Description,
+                    p.StartDate
+                })
+                .ToList();
+
+            foreach (var project in projects)
+            {
+                sb.AppendLine($"{project.Name}");
+                sb.AppendLine($"{project.Description}");
+                sb.AppendLine($"{project.StartDate.ToString("M/d/yyyy h:mm:ss tt", CultureInfo.InvariantCulture)}");
             }
 
             return sb.ToString().TrimEnd();
