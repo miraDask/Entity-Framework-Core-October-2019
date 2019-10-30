@@ -9,11 +9,14 @@
         public static void Main()
         {
             var context = new SoftUniContext();
-            var employeesFullInfo = GetEmployeesFullInformation(context);
-            Console.WriteLine(employeesFullInfo);
+            //var employeesFullInfo = GetEmployeesFullInformation(context);
+            //Console.WriteLine(employeesFullInfo);
 
-            var employeesWithSalaryOver50000 = GetEmployeesWithSalaryOver50000(context);
-            Console.WriteLine(employeesWithSalaryOver50000);
+            //var employeesWithSalaryOver50000 = GetEmployeesWithSalaryOver50000(context);
+            //Console.WriteLine(employeesWithSalaryOver50000);
+
+            var employeesFromResearchAndDevelopment = GetEmployeesFromResearchAndDevelopment(context);
+            Console.WriteLine(employeesFromResearchAndDevelopment);
         }
 
         public static string GetEmployeesFullInformation(SoftUniContext context)
@@ -59,6 +62,30 @@
             foreach (var e in employees)
             {
                 sb.AppendLine($"{e.FirstName} - {e.Salary:f2}");
+            }
+
+            return sb.ToString().TrimEnd();
+        }
+
+        public static string GetEmployeesFromResearchAndDevelopment(SoftUniContext context)
+        {
+            var sb = new StringBuilder();
+
+            var employees = context.Employees
+                .OrderBy(e => e.Salary)
+                .ThenByDescending(e => e.FirstName)
+                .Where(e => e.Department.Name == "Research and Development")
+                .Select(e => new
+                {
+                    e.FirstName,
+                    e.LastName,
+                    Department = e.Department.Name,
+                    e.Salary
+                });
+
+            foreach (var e in employees)
+            {
+                sb.AppendLine($"{e.FirstName} {e.LastName} from {e.Department} - ${e.Salary:f2}");
             }
 
             return sb.ToString().TrimEnd();
