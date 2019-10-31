@@ -1,11 +1,11 @@
 ﻿namespace SoftUni
 {
     using System;
-    using System.Globalization;
     using System.Linq;
     using System.Text;
     using SoftUni.Data;
     using SoftUni.Models;
+    using System.Globalization;
 
     public class StartUp
     {
@@ -36,8 +36,11 @@
             //var departmentsWithMoreThan5Employees = GetLatestProjects(context);
             //Console.WriteLine(departmentsWithMoreThan5Employees);
 
-            var employeesWithIncreasedSalary = IncreaseSalaries(context);
-            Console.WriteLine(employeesWithIncreasedSalary);
+            //var employeesWithIncreasedSalary = IncreaseSalaries(context);
+            //Console.WriteLine(employeesWithIncreasedSalary);
+
+            var employeesByFirstNameStartingWithSa = GetEmployeesByFirstNameStartingWithSa(context);
+            Console.WriteLine(employeesByFirstNameStartingWithSa);
         }
 
         public static string GetEmployeesFullInformation(SoftUniContext context)
@@ -343,6 +346,27 @@
                 .ToList();
 
             employees.ForEach(e => sb.AppendLine($"{e.Name} (${e.Salary:f2})"));
+
+            return sb.ToString().TrimEnd();
+        }
+
+        public static string GetEmployeesByFirstNameStartingWithSa(SoftUniContext context)
+        {
+            var sb = new StringBuilder();
+
+            var targetingEmployees = context.Employees
+                .OrderBy(e => e.FirstName)
+                .ThenBy(e => e.LastName)
+                .Where(e => e.FirstName.StartsWith("Sa"))
+                .Select(e => new
+                {
+                    Name = e.FirstName + " " + e.LastName,
+                    e.JobTitle,
+                    e.Salary
+                })
+                .ToList();
+
+            targetingEmployees.ForEach(e => sb.AppendLine($"{e.Name} - {e.JobTitle} - (${e.Salary:f2})"));
 
             return sb.ToString().TrimEnd();
         }
