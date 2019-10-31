@@ -12,6 +12,8 @@
         public static void Main()
         {
             var context = new SoftUniContext();
+
+            //---Methods tests:--
             //var employeesFullInfo = GetEmployeesFullInformation(context);
             //Console.WriteLine(employeesFullInfo);
 
@@ -39,8 +41,11 @@
             //var employeesWithIncreasedSalary = IncreaseSalaries(context);
             //Console.WriteLine(employeesWithIncreasedSalary);
 
-            var employeesByFirstNameStartingWithSa = GetEmployeesByFirstNameStartingWithSa(context);
-            Console.WriteLine(employeesByFirstNameStartingWithSa);
+            //var employeesByFirstNameStartingWithSa = GetEmployeesByFirstNameStartingWithSa(context);
+            //Console.WriteLine(employeesByFirstNameStartingWithSa);
+
+            //var first10ProjectsAfterDeleteProjectWithId2 = DeleteProjectById(context);
+            //Console.WriteLine(first10ProjectsAfterDeleteProjectWithId2);
         }
 
         public static string GetEmployeesFullInformation(SoftUniContext context)
@@ -367,6 +372,33 @@
                 .ToList();
 
             targetingEmployees.ForEach(e => sb.AppendLine($"{e.Name} - {e.JobTitle} - (${e.Salary:f2})"));
+
+            return sb.ToString().TrimEnd();
+        }
+
+        public static string DeleteProjectById(SoftUniContext context) {
+
+            var sb = new StringBuilder();
+
+            var targetingProjectId = 2;
+
+            var targetingEmployeesProjects = context.EmployeesProjects
+                .Where(ep => ep.ProjectId == targetingProjectId)
+                .ToList();
+
+            var targetingProject = context.Projects.Find(targetingProjectId);
+            
+            targetingEmployeesProjects.ForEach(ep => context.Remove(ep));
+            context.Remove(targetingProject);
+
+            context.SaveChanges();
+
+            var firstTenProjects = context.Projects
+                .Take(10)
+                .Select(p => p.Name)
+                .ToList();
+
+            firstTenProjects.ForEach(projectName => sb.AppendLine(projectName));
 
             return sb.ToString().TrimEnd();
         }
