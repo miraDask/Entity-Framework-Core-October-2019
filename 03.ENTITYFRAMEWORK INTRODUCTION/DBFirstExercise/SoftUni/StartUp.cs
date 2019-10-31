@@ -14,6 +14,7 @@
             var context = new SoftUniContext();
 
             //---Methods tests:--
+
             //var employeesFullInfo = GetEmployeesFullInformation(context);
             //Console.WriteLine(employeesFullInfo);
 
@@ -46,6 +47,9 @@
 
             //var first10ProjectsAfterDeleteProjectWithId2 = DeleteProjectById(context);
             //Console.WriteLine(first10ProjectsAfterDeleteProjectWithId2);
+
+            //var countOfDeletedAddressesInTargetingTown = RemoveTown(context);
+            //Console.WriteLine(countOfDeletedAddressesInTargetingTown);
         }
 
         public static string GetEmployeesFullInformation(SoftUniContext context)
@@ -401,6 +405,31 @@
             firstTenProjects.ForEach(projectName => sb.AppendLine(projectName));
 
             return sb.ToString().TrimEnd();
+        }
+
+        public static string RemoveTown(SoftUniContext context)
+        {
+
+            var townNameToDelete = "Seattle";
+            var townToDelete = context.Towns
+                .Where(t => t.Name == townNameToDelete)
+                .FirstOrDefault();
+            
+            var targetingAddresses = context.Addresses
+                .Where(a => a.Town.Name == townNameToDelete)
+                .ToList();
+
+            var employeesLivingOnTargetingAddresses = context.Employees
+                .Where(e => targetingAddresses.Contains(e.Address))
+                .ToList();
+
+            employeesLivingOnTargetingAddresses.ForEach(e => e.Address = null);
+            targetingAddresses.ForEach(a => context.Remove(a));
+            context.Remove(townToDelete);
+
+            context.SaveChanges();
+
+            return $"{targetingAddresses.Count} addresses in Seattle were deleted";
         }
     }
 }
