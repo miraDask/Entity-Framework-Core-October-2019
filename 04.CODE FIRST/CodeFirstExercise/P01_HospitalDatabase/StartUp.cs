@@ -1,7 +1,7 @@
-﻿
-namespace P01_HospitalDatabase
+﻿namespace P01_HospitalDatabase
 {
-    using System;
+    using Microsoft.EntityFrameworkCore;
+    using P01_HospitalDatabase.Data;
     
     class StartUp
     {
