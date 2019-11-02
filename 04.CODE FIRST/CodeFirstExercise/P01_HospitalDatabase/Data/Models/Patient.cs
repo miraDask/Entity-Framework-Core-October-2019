@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-     
+    
     public class Patient
     {
         public int PatientId { get; set; }

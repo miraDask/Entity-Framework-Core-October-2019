@@ -1,11 +1,15 @@
 ﻿namespace P01_HospitalDatabase.Data
 {
-    using JetBrains.Annotations;
     using Microsoft.EntityFrameworkCore;
     using P01_HospitalDatabase.Data.Models;
 
     public class HospitalDbContext : DbContext
     {
+        public HospitalDbContext()
+        {
+
+        }
+
         public HospitalDbContext(DbContextOptions options) : base(options)
         {
         }

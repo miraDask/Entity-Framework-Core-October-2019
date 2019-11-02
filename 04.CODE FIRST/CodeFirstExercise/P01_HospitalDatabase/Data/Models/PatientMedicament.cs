@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace P01_HospitalDatabase.Data.Models
+﻿namespace P01_HospitalDatabase.Data.Models
 {
+    using System.ComponentModel.DataAnnotations.Schema;
+
     public class PatientMedicament
     {
         [ForeignKey(nameof(Patient))]
