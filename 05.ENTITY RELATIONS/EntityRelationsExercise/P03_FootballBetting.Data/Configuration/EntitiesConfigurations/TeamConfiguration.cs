@@ -4,6 +4,8 @@
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
+    using static DataValidations.Team;
+
     public class TeamConfiguration : IEntityTypeConfiguration<Team>
     {
         public void Configure(EntityTypeBuilder<Team> team)
@@ -11,17 +13,17 @@
             team.HasKey(t => t.TeamId);
 
             team.Property(t => t.Name)
-            .HasMaxLength(50)
+            .HasMaxLength(NameMaxLength)
             .IsUnicode()
             .IsRequired();
 
             team.Property(t => t.LogoUrl)
-            .HasMaxLength(250)
+            .HasMaxLength(LogoUrlMaxLength)
             .IsUnicode(false)
             .IsRequired(false);
 
             team.Property(t => t.Initials)
-            .HasMaxLength(3)
+            .HasMaxLength(InitialsMaxLength)
             .IsUnicode()
             .IsRequired();
 

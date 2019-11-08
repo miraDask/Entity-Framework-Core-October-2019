@@ -5,6 +5,8 @@
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
+    using static DataValidations.Town;
+
     public class TownConfiguration : IEntityTypeConfiguration<Town>
     {
         public void Configure(EntityTypeBuilder<Town> town)
@@ -12,7 +14,7 @@
             town.HasKey(t => t.TownId);
 
             town.Property(t => t.Name)
-            .HasMaxLength(30)
+            .HasMaxLength(NameMaxLength)
             .IsUnicode()
             .IsRequired();
 

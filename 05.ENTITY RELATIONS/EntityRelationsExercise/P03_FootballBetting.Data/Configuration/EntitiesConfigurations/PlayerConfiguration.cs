@@ -5,6 +5,8 @@
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
+    using static DataValidations.Player;
+
     public class PlayerConfiguration : IEntityTypeConfiguration<Player>
     {
         public void Configure(EntityTypeBuilder<Player> player)
@@ -12,7 +14,7 @@
             player.HasKey(p => p.PlayerId);
 
             player.Property(p => p.Name)
-            .HasMaxLength(30)
+            .HasMaxLength(NameMaxLength)
             .IsUnicode()
             .IsRequired();
 
