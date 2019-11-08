@@ -68,11 +68,13 @@
 
                 entity.HasOne(t => t.PrimaryKitColor)
                 .WithMany(c => c.PrimaryKitTeams)
-                .HasForeignKey(t => t.PrimaryKitColorId);
+                .HasForeignKey(t => t.PrimaryKitColorId)
+                .OnDelete(DeleteBehavior.Restrict);
 
                 entity.HasOne(t => t.SecondaryKitColor)
                 .WithMany(c => c.SecondaryKitTeams)
-                .HasForeignKey(t => t.SecondaryKitColorId);
+                .HasForeignKey(t => t.SecondaryKitColorId)
+                .OnDelete(DeleteBehavior.Restrict);
 
                 entity.HasOne(t => t.Town)
                 .WithMany(t => t.Teams)
@@ -196,11 +198,13 @@
 
                 entity.HasOne(g => g.HomeTeam)
                 .WithMany(t => t.HomeGames)
-                .HasForeignKey(g => g.HomeTeamId);
+                .HasForeignKey(g => g.HomeTeamId)
+                .OnDelete(DeleteBehavior.Restrict);
 
                 entity.HasOne(g => g.AwayTeam)
                 .WithMany(t => t.AwayGames)
-                .HasForeignKey(g => g.AwayTeamId);
+                .HasForeignKey(g => g.AwayTeamId)
+                .OnDelete(DeleteBehavior.Restrict);
             });
 
             builder.Entity<Bet>(entity => {
