@@ -1,7 +1,7 @@
 ﻿namespace P03_SalesDatabase
 {
+    using Data;
     using Microsoft.EntityFrameworkCore;
-    using P03_SalesDatabase.Data;
     
     public class StartUp
     {
@@ -10,7 +10,6 @@
             var db = new SalesContext();
 
             db.Database.Migrate();
-
 
         }
     }

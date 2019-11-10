@@ -7,7 +7,6 @@
     {
         public HospitalDbContext()
         {
-
         }
 
         public HospitalDbContext(DbContextOptions options) : base(options)

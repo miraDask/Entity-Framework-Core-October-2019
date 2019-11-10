@@ -1,8 +1,8 @@
 ﻿namespace P03_SalesDatabase.Data
 {
     
+    using Models;
     using Microsoft.EntityFrameworkCore;
-    using P03_SalesDatabase.Data.Models;
     
     public class SalesContext : DbContext
     {

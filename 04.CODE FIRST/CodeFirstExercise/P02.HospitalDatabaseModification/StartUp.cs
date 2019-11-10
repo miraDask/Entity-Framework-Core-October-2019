@@ -1,6 +1,5 @@
 ﻿namespace P01_HospitalDatabase
 {
-    using System; 
     
     public class StartUp
     {
