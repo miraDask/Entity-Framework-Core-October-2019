@@ -24,7 +24,12 @@
                 //Console.WriteLine(books);
 
                 //Problem 3:
-                var books = GetBooksByPrice(context);
+                //var books = GetBooksByPrice(context);
+                //Console.WriteLine(books);
+
+                //Problem 4:
+                var year = int.Parse(Console.ReadLine());
+                var books = GetBooksNotReleasedIn(context, year);
                 Console.WriteLine(books);
             }
         }
@@ -90,5 +95,27 @@
 
             return sb.ToString().TrimEnd();
         }
+
+        //Problem 4:
+        public static string GetBooksNotReleasedIn(BookShopContext context, int year)
+        {
+            var sb = new StringBuilder();
+
+            var books = context
+                .Books
+                .Where(b => b.ReleaseDate.Value.Year != year)
+                .Select(b => new { 
+                    b.BookId,
+                    b.Title
+                })
+                .OrderBy(b => b.BookId)
+                .ToList();
+
+            books.ForEach(b => sb.AppendLine(b.Title));
+
+            return sb.ToString().TrimEnd();
+        }
+
+
     }
 }
