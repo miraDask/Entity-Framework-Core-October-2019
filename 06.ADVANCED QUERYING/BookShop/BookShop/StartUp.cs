@@ -5,6 +5,7 @@
     using System.Text;
     using System.Linq;
     using BookShop.Models.Enums;
+    using System.Globalization;
 
     public class StartUp
     {
@@ -32,8 +33,14 @@
                 //var books = GetBooksNotReleasedIn(context, year);
                 //Console.WriteLine(books);
 
-                var input = Console.ReadLine();
-                var books = GetBooksByCategory(context, input);
+                //Problem 5:
+                //var input = Console.ReadLine();
+                //var books = GetBooksByCategory(context, input);
+                //Console.WriteLine(books);
+
+                //Problem 6:
+                var date = Console.ReadLine();
+                var books = GetBooksReleasedBefore(context, date);
                 Console.WriteLine(books);
             }
         }
@@ -142,6 +149,29 @@
                 .ToList();
 
             books.ForEach(b => sb.AppendLine(b));
+
+            return sb.ToString().TrimEnd();
+        }
+
+        //Problem 6:
+        public static string GetBooksReleasedBefore(BookShopContext context, string date)
+        {
+            var sb = new StringBuilder();
+            var dateFormat = "dd-MM-yyyy";
+
+            var books = context
+                .Books
+                .OrderByDescending(b => b.ReleaseDate)
+                .Where(b => b.ReleaseDate < DateTime.ParseExact(date, dateFormat, CultureInfo.InvariantCulture))
+                .Select(b => new
+                {
+                    b.Title,
+                    b.EditionType,
+                    b.Price
+                })
+                .ToList();
+
+            books.ForEach(b => sb.AppendLine($"{b.Title} - {b.EditionType} - ${b.Price:f2}"));
 
             return sb.ToString().TrimEnd();
         }
