@@ -11,15 +11,22 @@
         public static void Main()
         {
             var context = new BookShopContext();
+        
+            using (context)
+            {
+                // Problem 1 :
+                //var command = Console.ReadLine();
+                //var books = GetBooksByAgeRestriction(context, command);
+                //Console.WriteLine(books);
 
-            // Problem 1 :
-            //var command = Console.ReadLine();
-            //var books = GetBooksByAgeRestriction(context, command);
-            //Console.WriteLine(books);
+                //Problem 2:
+                //var books = GetGoldenBooks(context);
+                //Console.WriteLine(books);
 
-            //Problem 2:
-            var books = GetGoldenBooks(context);
-            Console.WriteLine(books);
+                //Problem 3:
+                var books = GetBooksByPrice(context);
+                Console.WriteLine(books);
+            }
         }
 
         //Problem 1:
@@ -60,6 +67,27 @@
 
             books.ForEach(b => sb.AppendLine(b.Title));
     
+            return sb.ToString().TrimEnd();
+        }
+
+        //Problem 3:
+        public static string GetBooksByPrice(BookShopContext context)
+        {
+            var sb = new StringBuilder();
+
+            var books = context
+                .Books
+                .Where(b => b.Price > 40)
+                .OrderByDescending(b => b.Price)
+                .Select(b => new
+                {
+                    b.Title,
+                    b.Price
+                })
+                .ToList();
+
+            books.ForEach(b => sb.AppendLine($"{b.Title} - ${b.Price:f2}"));
+
             return sb.ToString().TrimEnd();
         }
     }
