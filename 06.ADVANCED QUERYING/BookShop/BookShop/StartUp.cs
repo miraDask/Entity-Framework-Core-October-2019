@@ -11,7 +11,7 @@
         public static void Main()
         {
             var context = new BookShopContext();
-        
+
             using (context)
             {
                 // Problem 1 :
@@ -28,8 +28,12 @@
                 //Console.WriteLine(books);
 
                 //Problem 4:
-                var year = int.Parse(Console.ReadLine());
-                var books = GetBooksNotReleasedIn(context, year);
+                //var year = int.Parse(Console.ReadLine());
+                //var books = GetBooksNotReleasedIn(context, year);
+                //Console.WriteLine(books);
+
+                var input = Console.ReadLine();
+                var books = GetBooksByCategory(context, input);
                 Console.WriteLine(books);
             }
         }
@@ -39,16 +43,17 @@
         {
             var sb = new StringBuilder();
 
-                var books = context
-                    .Books
-                    .Where(b => b.AgeRestriction.ToString().ToUpper() == command.ToUpper())
-                    .Select(b => new { 
-                        b.Title
-                    })
-                    .OrderBy(b => b.Title)
-                    .ToList();
+            var books = context
+                .Books
+                .Where(b => b.AgeRestriction.ToString().ToUpper() == command.ToUpper())
+                .Select(b => new
+                {
+                    b.Title
+                })
+                .OrderBy(b => b.Title)
+                .ToList();
 
-                books.ForEach(b => sb.AppendLine(b.Title));
+            books.ForEach(b => sb.AppendLine(b.Title));
 
             return sb.ToString().TrimEnd();
         }
@@ -71,7 +76,7 @@
                 .ToList();
 
             books.ForEach(b => sb.AppendLine(b.Title));
-    
+
             return sb.ToString().TrimEnd();
         }
 
@@ -104,7 +109,8 @@
             var books = context
                 .Books
                 .Where(b => b.ReleaseDate.Value.Year != year)
-                .Select(b => new { 
+                .Select(b => new
+                {
                     b.BookId,
                     b.Title
                 })
@@ -116,6 +122,28 @@
             return sb.ToString().TrimEnd();
         }
 
+        //Problem 5:
+        public static string GetBooksByCategory(BookShopContext context, string input)
+        {
+            var sb = new StringBuilder();
+            var categories = input
+                .ToLower()
+                .Split(' ', StringSplitOptions.RemoveEmptyEntries);
 
+            var books = context
+                .Books
+                .Where(b => b.BookCategories
+                             .Select(bc => new
+                             {
+                                 bc.Category.Name
+                             }).Any(bc => categories.Contains(bc.Name.ToLower())))
+                .Select(b => b.Title)
+                .OrderBy(b => b)
+                .ToList();
+
+            books.ForEach(b => sb.AppendLine(b));
+
+            return sb.ToString().TrimEnd();
+        }
     }
 }
