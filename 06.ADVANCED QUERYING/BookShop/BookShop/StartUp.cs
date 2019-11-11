@@ -39,9 +39,14 @@
                 //Console.WriteLine(books);
 
                 //Problem 6:
-                var date = Console.ReadLine();
-                var books = GetBooksReleasedBefore(context, date);
-                Console.WriteLine(books);
+                //var date = Console.ReadLine();
+                //var books = GetBooksReleasedBefore(context, date);
+                //Console.WriteLine(books);
+
+                //Problem 7:
+                var input = Console.ReadLine();
+                var authors = GetAuthorNamesEndingIn(context, input);
+                Console.WriteLine(authors);
             }
         }
 
@@ -172,6 +177,25 @@
                 .ToList();
 
             books.ForEach(b => sb.AppendLine($"{b.Title} - {b.EditionType} - ${b.Price:f2}"));
+
+            return sb.ToString().TrimEnd();
+        }
+
+        //Problem 7:
+        public static string GetAuthorNamesEndingIn(BookShopContext context, string input)
+        {
+            var sb = new StringBuilder();
+
+            var autors = context
+                .Authors
+                .Where(a => a.FirstName.EndsWith(input))
+                .Select(a => new { 
+                    FullName = a.FirstName + " " + a.LastName,
+                })
+                .OrderBy(a => a.FullName)
+                .ToList();
+
+            autors.ForEach(a => sb.AppendLine(a.FullName));
 
             return sb.ToString().TrimEnd();
         }
