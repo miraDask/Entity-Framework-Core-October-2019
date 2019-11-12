@@ -68,9 +68,13 @@
                 //var authors = CountCopiesByAuthor(context);
                 //Console.WriteLine(authors);
 
-                //Problem 11:
-                var totalProfitByCategory = GetTotalProfitByCategory(context);
-                Console.WriteLine(totalProfitByCategory);
+                //Problem 12:
+                //var totalProfitByCategory = GetTotalProfitByCategory(context);
+                //Console.WriteLine(totalProfitByCategory);
+
+                //Problem 13:
+                var mostRecentBooks = GetMostRecentBooks(context);
+                Console.WriteLine(mostRecentBooks);
             }
         }
 
@@ -313,6 +317,39 @@
                 .ToList();
 
             categories.ForEach(c => sb.AppendLine($"{c.Name} ${c.TotalProfit:f2}"));
+
+            return sb.ToString().TrimEnd();
+        }
+
+        //Problem 13:
+        public static string GetMostRecentBooks(BookShopContext context)
+        {
+            var sb = new StringBuilder();
+
+            var categories = context
+                .Categories
+                .Select(c => new
+                {
+                    c.Name,
+                    MostRecsentBooks = c.CategoryBooks
+                                        .OrderByDescending(cb => cb.Book.ReleaseDate)
+                                        .Take(3)
+                                        .Select(cb => new
+                                        {
+                                            cb.Book.Title,
+                                            cb.Book.ReleaseDate
+                                        })
+                                        .ToList()
+                })
+                .OrderBy(c => c.Name)
+                .ToList();
+
+            categories.ForEach(c =>
+            {
+                sb.AppendLine($"--{c.Name}");
+                c.MostRecsentBooks.ForEach(b => sb.AppendLine($"{b.Title} ({b.ReleaseDate.Value.Year})"));
+                
+            });
 
             return sb.ToString().TrimEnd();
         }
