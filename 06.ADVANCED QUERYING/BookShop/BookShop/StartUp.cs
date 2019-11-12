@@ -54,9 +54,16 @@
                 //Console.WriteLine(authors);
 
                 //Problem 9:
-                var input = Console.ReadLine();
-                var books = GetBooksByAuthor(context, input);
-                Console.WriteLine(books);
+                //var input = Console.ReadLine();
+                //var books = GetBooksByAuthor(context, input);
+                //Console.WriteLine(books);
+
+                //Problem 10:
+                var lengthCheck = int.Parse(Console.ReadLine());
+                var bookCount = CountBooks(context, lengthCheck);
+                Console.WriteLine(bookCount);
+                Console.WriteLine($"There are {bookCount} books with longer title than {lengthCheck} symbols");
+
             }
         }
 
@@ -245,6 +252,16 @@
             books.ForEach(b => sb.AppendLine($"{b.Title} ({b.AuthorName})"));
 
             return sb.ToString().TrimEnd();
+        }
+
+        public static int CountBooks(BookShopContext context, int lengthCheck)
+        {
+            var books = context
+                .Books
+                .Where(b => b.Title.Length > lengthCheck)
+                .ToList();
+
+            return books.Count;
         }
     }
 }
