@@ -49,9 +49,14 @@
                 //Console.WriteLine(authors);
 
                 //Problem 8:
+                //var input = Console.ReadLine();
+                //var authors = GetBookTitlesContaining(context, input);
+                //Console.WriteLine(authors);
+
+                //Problem 9:
                 var input = Console.ReadLine();
-                var authors = GetBookTitlesContaining(context, input);
-                Console.WriteLine(authors);
+                var books = GetBooksByAuthor(context, input);
+                Console.WriteLine(books);
             }
         }
 
@@ -218,6 +223,26 @@
                 .ToList();
 
             books.ForEach(b => sb.AppendLine(b));
+
+            return sb.ToString().TrimEnd();
+        }
+
+        //Problem 9:
+        public static string GetBooksByAuthor(BookShopContext context, string input)
+        {
+            var sb = new StringBuilder();
+
+            var books = context
+                .Books
+                .Where(b => b.Author.LastName.ToLower().StartsWith(input.ToLower()))
+                .OrderBy(b => b.BookId)
+                .Select(b => new { 
+                    b.Title,
+                    AuthorName = b.Author.FirstName + " " + b.Author.LastName
+                })
+                .ToList();
+
+            books.ForEach(b => sb.AppendLine($"{b.Title} ({b.AuthorName})"));
 
             return sb.ToString().TrimEnd();
         }
