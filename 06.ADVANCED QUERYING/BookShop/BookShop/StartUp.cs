@@ -59,10 +59,15 @@
                 //Console.WriteLine(books);
 
                 //Problem 10:
-                var lengthCheck = int.Parse(Console.ReadLine());
-                var bookCount = CountBooks(context, lengthCheck);
-                Console.WriteLine(bookCount);
-                Console.WriteLine($"There are {bookCount} books with longer title than {lengthCheck} symbols");
+                //var lengthCheck = int.Parse(Console.ReadLine());
+                //var bookCount = CountBooks(context, lengthCheck);
+                //Console.WriteLine(bookCount);
+                //Console.WriteLine($"There are {bookCount} books with longer title than {lengthCheck} symbols");
+
+                //Problem 11:
+                var authors = CountCopiesByAuthor(context);
+                Console.WriteLine(authors);
+
 
             }
         }
@@ -254,6 +259,7 @@
             return sb.ToString().TrimEnd();
         }
 
+        //Problem 10:
         public static int CountBooks(BookShopContext context, int lengthCheck)
         {
             var books = context
@@ -262,6 +268,26 @@
                 .ToList();
 
             return books.Count;
+        }
+
+        //Problem 11:
+        public static string CountCopiesByAuthor(BookShopContext context)
+        {
+            var sb = new StringBuilder();
+
+            var authors = context
+                .Authors
+                .Select(a => new
+                {
+                    FullName = a.FirstName + " " + a.LastName,
+                    TotalCopies = a.Books.Sum(b => b.Copies)
+                })
+                .OrderByDescending(a => a.TotalCopies)
+                .ToList();
+
+            authors.ForEach(a => sb.AppendLine($"{a.FullName} - {a.TotalCopies}"));
+
+            return sb.ToString().TrimEnd();
         }
     }
 }
