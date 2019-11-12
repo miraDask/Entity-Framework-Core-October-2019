@@ -65,10 +65,12 @@
                 //Console.WriteLine($"There are {bookCount} books with longer title than {lengthCheck} symbols");
 
                 //Problem 11:
-                var authors = CountCopiesByAuthor(context);
-                Console.WriteLine(authors);
+                //var authors = CountCopiesByAuthor(context);
+                //Console.WriteLine(authors);
 
-
+                //Problem 11:
+                var totalProfitByCategory = GetTotalProfitByCategory(context);
+                Console.WriteLine(totalProfitByCategory);
             }
         }
 
@@ -211,7 +213,8 @@
             var autors = context
                 .Authors
                 .Where(a => a.FirstName.EndsWith(input))
-                .Select(a => new { 
+                .Select(a => new
+                {
                     FullName = a.FirstName + " " + a.LastName,
                 })
                 .OrderBy(a => a.FullName)
@@ -248,7 +251,8 @@
                 .Books
                 .Where(b => b.Author.LastName.ToLower().StartsWith(input.ToLower()))
                 .OrderBy(b => b.BookId)
-                .Select(b => new { 
+                .Select(b => new
+                {
                     b.Title,
                     AuthorName = b.Author.FirstName + " " + b.Author.LastName
                 })
@@ -286,6 +290,29 @@
                 .ToList();
 
             authors.ForEach(a => sb.AppendLine($"{a.FullName} - {a.TotalCopies}"));
+
+            return sb.ToString().TrimEnd();
+        }
+
+        //Problem 12:
+        public static string GetTotalProfitByCategory(BookShopContext context)
+        {
+            var sb = new StringBuilder();
+
+            var categories = context
+                .Categories
+                .Select(c => new
+                {
+                    c.Name,
+                    TotalProfit = c.CategoryBooks
+                                   .Select(cb => cb.Book.Price * cb.Book.Copies)
+                                   .Sum()
+                })
+                .OrderByDescending(c => c.TotalProfit)
+                .ThenBy(c => c.Name)
+                .ToList();
+
+            categories.ForEach(c => sb.AppendLine($"{c.Name} ${c.TotalProfit:f2}"));
 
             return sb.ToString().TrimEnd();
         }
