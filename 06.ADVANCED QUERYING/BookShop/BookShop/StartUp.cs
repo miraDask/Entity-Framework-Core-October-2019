@@ -73,8 +73,11 @@
                 //Console.WriteLine(totalProfitByCategory);
 
                 //Problem 13:
-                var mostRecentBooks = GetMostRecentBooks(context);
-                Console.WriteLine(mostRecentBooks);
+                //var mostRecentBooks = GetMostRecentBooks(context);
+                //Console.WriteLine(mostRecentBooks);
+
+                //Problem 14:
+                IncreasePrices(context);
             }
         }
 
@@ -337,7 +340,7 @@
                                         .Select(cb => new
                                         {
                                             cb.Book.Title,
-                                            cb.Book.ReleaseDate
+                                            ReleaseDate = cb.Book.ReleaseDate.Value.Year
                                         })
                                         .ToList()
                 })
@@ -347,11 +350,26 @@
             categories.ForEach(c =>
             {
                 sb.AppendLine($"--{c.Name}");
-                c.MostRecsentBooks.ForEach(b => sb.AppendLine($"{b.Title} ({b.ReleaseDate.Value.Year})"));
+                c.MostRecsentBooks.ForEach(b => sb.AppendLine($"{b.Title} ({b.ReleaseDate})"));
                 
             });
 
             return sb.ToString().TrimEnd();
+        }
+
+        //Problem 14:
+        public static void IncreasePrices(BookShopContext context)
+        {
+            const int year = 2010;
+            const int increasementRate = 5;
+
+            var booksForPriceIncreasment = context
+                .Books
+                .Where(b => b.ReleaseDate.Value.Year < year)
+                .ToList();
+
+            booksForPriceIncreasment.ForEach(b => b.Price += increasementRate);
+            context.SaveChanges();
         }
     }
 }
