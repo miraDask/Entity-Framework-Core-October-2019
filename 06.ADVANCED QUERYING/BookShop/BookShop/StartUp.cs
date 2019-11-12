@@ -77,7 +77,10 @@
                 //Console.WriteLine(mostRecentBooks);
 
                 //Problem 14:
-                IncreasePrices(context);
+                //IncreasePrices(context);
+
+                //Problem 15:
+
             }
         }
 
@@ -370,6 +373,22 @@
 
             booksForPriceIncreasment.ForEach(b => b.Price += increasementRate);
             context.SaveChanges();
+        }
+
+        //Problem 15:
+        public static int RemoveBooks(BookShopContext context)
+        {
+            const int count = 4200;
+
+            var booksToDelete = context
+                .Books
+                .Where(b => b.Copies < count)
+                .ToList();
+
+            context.RemoveRange(booksToDelete);
+            context.SaveChanges();
+
+            return booksToDelete.Count;
         }
     }
 }
