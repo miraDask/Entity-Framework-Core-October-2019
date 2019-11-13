@@ -28,6 +28,6 @@ namespace FastFood.Models
 		[Required]
 		public Employee Employee { get; set; }
 
-		public ICollection<OrderItem> OrderItems { get; set; }
+        public ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
 	}
 }

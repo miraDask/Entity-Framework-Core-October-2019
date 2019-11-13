@@ -1,11 +1,14 @@
 ﻿namespace FastFood.Web.MappingConfiguration
 {
     using AutoMapper;
+    using FastFood.Models.Enums;
     using FastFood.Web.ViewModels.Categories;
     using FastFood.Web.ViewModels.Employees;
     using FastFood.Web.ViewModels.Items;
+    using FastFood.Web.ViewModels.Orders;
     using Models;
-
+    using System;
+    using System.Linq;
     using ViewModels.Positions;
 
     public class FastFoodProfile : Profile
@@ -40,6 +43,13 @@
 
             this.CreateMap<Item, ItemsAllViewModels>()
                 .ForMember(x => x.Category, y => y.MapFrom(s => s.Category.Name));
+
+            this.CreateMap<CreateOrderInputModel, Order>();
+
+            this.CreateMap<Order, OrderAllViewModel>()
+                .ForMember(x => x.OrderId, y => y.MapFrom(s => s.Id))
+                .ForMember(x => x.DateTime, y => y.MapFrom(s => s.DateTime.ToString("g")))
+                .ForMember(x => x.Employee, y => y.MapFrom(s => s.Employee.Name));
         }
     }
 }

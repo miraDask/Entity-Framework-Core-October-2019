@@ -8,6 +8,8 @@
 
         public int EmployeeId { get; set; }
 
+        public string Type { get; set; }
+
         public int Quantity { get; set; }
     }
 }
