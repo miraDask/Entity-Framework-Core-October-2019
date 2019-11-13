@@ -71,5 +71,14 @@
 
             return this.View(orders);
         }
+
+        public IActionResult Delete(int id)
+        {
+            var order = this.context.Orders.FirstOrDefault(o => o.Id == id);
+            this.context.Orders.Remove(order);
+            this.context.SaveChanges();
+
+            return this.RedirectToAction("All", "Orders");
+        }
     }
 }

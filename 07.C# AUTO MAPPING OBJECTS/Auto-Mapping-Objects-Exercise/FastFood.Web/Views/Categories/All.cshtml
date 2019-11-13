@@ -3,6 +3,10 @@
 @{
     ViewData["Title"] = "All Categories";
 }
+
+<h1 class="text-center"><a asp-area="" asp-controller="Categories" asp-action="Create">Create Category</a></h1>
+<hr class="hr-2" />
+
 <h1 class="text-center">All Categories</h1>
 <hr class="hr-2" />
 <table class="table mx-auto">
@@ -13,12 +17,13 @@
         </tr>
     </thead>
     <tbody>
-        @for(var i = 0; i < Model.Count(); i++)
-    {
+        @for (var i = 0; i < Model.Count(); i++)
+        {
         <tr class="row">
             <th class="col-md-1">@(i + 1)</th>
             <td class="col-md-2">@Model[i].Name</td>
+            <td class="col-md-2"><a asp-area="" asp-controller="Categories" asp-action="Delete" method="post" asp-route-id="@Model[i].Id">Delete</a></td>
         </tr>
-    }
+        }
     </tbody>
 </table>

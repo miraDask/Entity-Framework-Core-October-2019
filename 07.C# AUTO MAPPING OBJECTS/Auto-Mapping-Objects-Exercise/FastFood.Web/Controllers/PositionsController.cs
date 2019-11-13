@@ -51,5 +51,14 @@
 
             return this.View(positions);
         }
+
+        public IActionResult Delete(int id)
+        {
+            var position = this.context.Positions.FirstOrDefault(o => o.Id == id);
+            this.context.Positions.Remove(position);
+            this.context.SaveChanges();
+
+            return this.RedirectToAction("All", "Positions");
+        }
     }
 }

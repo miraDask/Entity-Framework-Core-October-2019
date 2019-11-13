@@ -3,6 +3,8 @@
 @{
     ViewData["Title"] = "All Orders";
 }
+    <h1 class="text-center"><a asp-area="" asp-controller="Orders" asp-action="Create">Create Order</a></h1>
+    <hr class="hr-2" />
 <h1 class="text-center">All Orders</h1>
 <hr class="hr-2" />
 <table class="table mx-auto">
@@ -24,6 +26,7 @@
             <td class="col-md-2">@Model[i].Customer</td>
             <td class="col-md-2">@Model[i].Employee</td>
             <td class="col-md-2">@Model[i].DateTime</td>
+            <td class="col-md-2"><a asp-area="" asp-controller="Orders" asp-action="Delete" method="post" asp-route-id="@Model[i].OrderId">Delete</a></td> 
         </tr>
     }
     </tbody>

@@ -50,5 +50,14 @@
 
             return this.View(categories);
         }
+
+        public IActionResult Delete(int id)
+        {
+            var category = this.context.Categories.FirstOrDefault(o => o.Id == id);
+            this.context.Categories.Remove(category);
+            this.context.SaveChanges();
+
+            return this.RedirectToAction("All", "Categories");
+        }
     }
 }

@@ -3,7 +3,11 @@
 @{
     ViewData["Title"] = "All Positions";
 }
-    <h1 class="text-center">All Positions</h1>
+    
+    <h1 class="text-center"><a asp-area="" asp-controller="Positions" asp-action="Create">Create Position</a></h1>
+    <hr class="hr-2" />
+
+<h1 class="text-center">All Positions</h1>
 <hr class="hr-2" />
 <table class="table mx-auto">
     <thead>
@@ -18,6 +22,7 @@
         <tr class="row">
             <th class="col-md-1">@(i + 1)</th>
             <td class="col-md-2">@Model[i].Name</td>
+            <td class="col-md-2"><a asp-area="" asp-controller="Positions" asp-action="Delete" method="post" asp-route-id="@Model[i].Id">Delete</a></td>
         </tr>
     }
     </tbody>

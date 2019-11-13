@@ -54,5 +54,14 @@
 
             return this.View(items);
         }
+
+        public IActionResult Delete(int id)
+        {
+            var item = this.context.Items.FirstOrDefault(o => o.Id == id);
+            this.context.Items.Remove(item);
+            this.context.SaveChanges();
+
+            return this.RedirectToAction("All", "Items");
+        }
     }
 }

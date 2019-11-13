@@ -55,5 +55,14 @@
 
             return this.View(employees);
         }
+
+        public IActionResult Delete(int id)
+        {
+            var employee = this.context.Employees.FirstOrDefault(o => o.Id == id);
+            this.context.Employees.Remove(employee);
+            this.context.SaveChanges();
+
+            return this.RedirectToAction("All", "Employees");
+        }
     }
 }
