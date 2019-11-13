@@ -6,6 +6,9 @@
 
     using Data;
     using ViewModels.Categories;
+    using FastFood.Models;
+    using AutoMapper.QueryableExtensions;
+    using System.Linq;
 
     public class CategoriesController : Controller
     {
@@ -26,12 +29,26 @@
         [HttpPost]
         public IActionResult Create(CreateCategoryInputModel model)
         {
-            throw new NotImplementedException();
+            if (!ModelState.IsValid)
+            {
+                return RedirectToAction("Error", "Home");
+            }
+
+            var categorie = this.mapper.Map<Category>(model);
+            this.context.Categories.Add(categorie);
+            this.context.SaveChanges();
+
+            return RedirectToAction("All", "Categories");
         }
 
         public IActionResult All()
         {
-            throw new NotImplementedException();
+            var categories = this.context
+                .Categories
+                .ProjectTo<CategoryAllViewModel>(this.mapper.ConfigurationProvider)
+                .ToList();
+
+            return this.View(categories);
         }
     }
 }
