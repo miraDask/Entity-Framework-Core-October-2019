@@ -20,7 +20,7 @@
 
         public IActionResult Register()
         {
-            throw new NotImplementedException();
+            return this.View();
         }
 
         [HttpPost]
