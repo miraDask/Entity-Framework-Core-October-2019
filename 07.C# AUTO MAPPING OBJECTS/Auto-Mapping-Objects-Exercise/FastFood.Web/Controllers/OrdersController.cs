@@ -10,7 +10,8 @@
     using AutoMapper;
     using AutoMapper.QueryableExtensions;
     using Microsoft.AspNetCore.Mvc;
-
+    using FastFood.Web.ViewModels.Items;
+    using FastFood.Web.ViewModels.Employees;
 
     public class OrdersController : Controller
     {
@@ -25,11 +26,17 @@
 
         public IActionResult Create()
         {
+
             var viewOrder = new CreateOrderViewModel
             {
-                Items = this.context.Items.Select(x => x.Id).ToList(),
-                Employees = this.context.Employees.Select(x => x.Id).ToList(),
-                
+                Items = this.context
+                .Items
+                .ProjectTo<ItemViewModel>(this.mapper.ConfigurationProvider)
+                .ToList(),
+                Employees = this.context
+                .Employees
+                .ProjectTo<EmployeeViewModel>(this.mapper.ConfigurationProvider)
+                .ToList()
             };
 
             return this.View(viewOrder);

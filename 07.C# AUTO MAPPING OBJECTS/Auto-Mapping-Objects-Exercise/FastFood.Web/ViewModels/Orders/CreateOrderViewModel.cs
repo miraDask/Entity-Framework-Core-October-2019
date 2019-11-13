@@ -2,11 +2,14 @@
 {
     using System.Collections.Generic;
 
+    using FastFood.Web.ViewModels.Employees;
+    using FastFood.Web.ViewModels.Items;
+
     public class CreateOrderViewModel
     {
-        public List<int> Items { get; set; }
+        public List<ItemViewModel> Items { get; set; }
 
-        public List<int> Employees { get; set; }
+        public List<EmployeeViewModel> Employees { get; set; }
 
     }
 }

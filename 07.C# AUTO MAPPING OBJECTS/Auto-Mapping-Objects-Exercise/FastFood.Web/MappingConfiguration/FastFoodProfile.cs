@@ -44,6 +44,10 @@
             this.CreateMap<Item, ItemsAllViewModels>()
                 .ForMember(x => x.Category, y => y.MapFrom(s => s.Category.Name));
 
+            this.CreateMap<Item, ItemViewModel>();
+
+            this.CreateMap<Employee, EmployeeViewModel>();
+
             this.CreateMap<CreateOrderInputModel, Order>();
 
             this.CreateMap<Order, OrderAllViewModel>()
