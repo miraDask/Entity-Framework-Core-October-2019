@@ -1,13 +1,14 @@
 ﻿namespace FastFood.Web.Controllers
 {
-    using AutoMapper;
-    using AutoMapper.QueryableExtensions;
-    using Microsoft.AspNetCore.Mvc;
     using System.Linq;
-
+    
     using Data;
     using Models;
     using ViewModels.Positions;
+
+    using AutoMapper;
+    using AutoMapper.QueryableExtensions;
+    using Microsoft.AspNetCore.Mvc;
 
     public class PositionsController : Controller
     {

@@ -1,14 +1,14 @@
 ﻿namespace FastFood.Web.Controllers
 {
-    using AutoMapper;
-    using Microsoft.AspNetCore.Mvc;
-    using System;
-
+    using System.Linq;
+    
     using Data;
     using ViewModels.Categories;
     using FastFood.Models;
+    
+    using AutoMapper;
     using AutoMapper.QueryableExtensions;
-    using System.Linq;
+    using Microsoft.AspNetCore.Mvc;
 
     public class CategoriesController : Controller
     {

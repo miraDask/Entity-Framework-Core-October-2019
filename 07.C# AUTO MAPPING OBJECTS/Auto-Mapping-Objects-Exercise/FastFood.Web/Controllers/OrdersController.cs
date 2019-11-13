@@ -1,15 +1,16 @@
 ﻿namespace FastFood.Web.Controllers
 {
-    using AutoMapper;
-    using Microsoft.AspNetCore.Mvc;
     using System;
     using System.Linq;
-
+    
     using Data;
     using ViewModels.Orders;
     using FastFood.Models;
+    
+    using AutoMapper;
     using AutoMapper.QueryableExtensions;
-    using FastFood.Models.Enums;
+    using Microsoft.AspNetCore.Mvc;
+
 
     public class OrdersController : Controller
     {
@@ -45,7 +46,6 @@
 
             var order = this.mapper.Map<Order>(model);
             order.DateTime = DateTime.Now;
-            order.Type = Enum.Parse<OrderType>(model.Type);
 
             var orderItem = new OrderItem()
             {
