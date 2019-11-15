@@ -18,9 +18,12 @@
             //context.Database.EnsureDeleted();
             //context.Database.EnsureCreated();
 
-            var usersFromJson = File.ReadAllText(@"../../../Datasets/users.json");
+            //var usersFromJson = File.ReadAllText(@"../../../Datasets/users.json");
+            //Console.WriteLine(ImportUsers(context, usersFromJson));
 
-            Console.WriteLine(ImportUsers(context, usersFromJson));
+            var productsFromJson = File.ReadAllText(@"../../../Datasets/products.json");
+            Console.WriteLine(ImportProducts(context, productsFromJson));
+
         }
 
         public static string ImportUsers(ProductShopContext context, string inputJson)
@@ -31,6 +34,19 @@
                 .ToList();
 
             context.Users.AddRange(validEntities);
+            context.SaveChanges();
+
+            return $"Successfully imported {validEntities.Count}";
+        }
+
+        public static string ImportProducts(ProductShopContext context, string inputJson)
+        {
+            var produstsFromJson = JsonConvert.DeserializeObject<Product[]>(inputJson);
+            var validEntities = produstsFromJson
+                .Where(p => p.Name != null && p.Name.Length >= 3)
+                .ToList();
+
+            context.Products.AddRange(validEntities);
             context.SaveChanges();
 
             return $"Successfully imported {validEntities.Count}";
