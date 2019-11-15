@@ -8,6 +8,7 @@
     using Models;
 
     using Newtonsoft.Json;
+    using Newtonsoft.Json.Serialization;
 
     public class StartUp
     {
@@ -15,23 +16,34 @@
         {
             var context = new ProductShopContext();
 
-            //context.Database.EnsureDeleted();
-            //context.Database.EnsureCreated();
+            using (context)
+            {
 
-            //var usersFromJson = File.ReadAllText(@"../../../Datasets/users.json");
-            //Console.WriteLine(ImportUsers(context, usersFromJson));
+                //context.Database.EnsureDeleted();
+                //context.Database.EnsureCreated();
 
-            //var productsFromJson = File.ReadAllText(@"../../../Datasets/products.json");
-            //Console.WriteLine(ImportProducts(context, productsFromJson));
+                //Problem 01
+                //var usersFromJson = File.ReadAllText(@"../../../Datasets/users.json");
+                //Console.WriteLine(ImportUsers(context, usersFromJson));
 
-            //var categoriesFromJson = File.ReadAllText(@"../../../Datasets/categories.json");
-            //Console.WriteLine(ImportCategories(context, categoriesFromJson));
+                //Problem 02
+                //var productsFromJson = File.ReadAllText(@"../../../Datasets/products.json");
+                //Console.WriteLine(ImportProducts(context, productsFromJson));
 
-            var categoryProductsFromJson = File.ReadAllText(@"../../../Datasets/categories-products.json");
-            Console.WriteLine(ImportCategoryProducts(context, categoryProductsFromJson));
+                //Problem 03
+                //var categoriesFromJson = File.ReadAllText(@"../../../Datasets/categories.json");
+                //Console.WriteLine(ImportCategories(context, categoriesFromJson));
 
+                //Problem 04
+                //var categoryProductsFromJson = File.ReadAllText(@"../../../Datasets/categories-products.json");
+                //Console.WriteLine(ImportCategoryProducts(context, categoryProductsFromJson));
+
+                //Problem 05
+                Console.WriteLine(GetProductsInRange(context));
+            }
         }
 
+        //Problem 01
         public static string ImportUsers(ProductShopContext context, string inputJson)
         {
             var users = JsonConvert.DeserializeObject<User[]>(inputJson);
@@ -45,6 +57,7 @@
             return $"Successfully imported {validEntities.Count}";
         }
 
+        //Problem 02
         public static string ImportProducts(ProductShopContext context, string inputJson)
         {
             var produstsFromJson = JsonConvert.DeserializeObject<Product[]>(inputJson);
@@ -58,6 +71,7 @@
             return $"Successfully imported {validEntities.Count}";
         }
 
+        //Problem 03
         public static string ImportCategories(ProductShopContext context, string inputJson)
         {
             var categoriesFromJson = JsonConvert.DeserializeObject<Category[]>(inputJson);
@@ -71,6 +85,7 @@
             return $"Successfully imported {validEntities.Count}";
         }
 
+        //Problem 04
         public static string ImportCategoryProducts(ProductShopContext context, string inputJson)
         {
             var categoryProducts = JsonConvert.DeserializeObject<CategoryProduct[]>(inputJson);
@@ -78,6 +93,33 @@
             context.SaveChanges();
 
             return $"Successfully imported {categoryProducts.Length}";
+        }
+
+        //Problem 05
+        public static string GetProductsInRange(ProductShopContext context)
+        {
+            var products = context
+                .Products
+                .Where(p => p.Price >= 500 && p.Price <= 1000)
+                .OrderBy(p => p.Price)
+                .Select(p => new
+                {
+                    p.Name,
+                    p.Price,
+                    Seller = $"{p.Seller.FirstName} {p.Seller.LastName}"
+                })
+                .ToList();
+
+            var resolver = new DefaultContractResolver() {
+                NamingStrategy = new CamelCaseNamingStrategy()
+            }; 
+
+            var outputJson = JsonConvert.SerializeObject(products,new JsonSerializerSettings(){ 
+                Formatting = Formatting.Indented,
+                ContractResolver = resolver
+            });
+
+            return outputJson;
         }
     }
 }
