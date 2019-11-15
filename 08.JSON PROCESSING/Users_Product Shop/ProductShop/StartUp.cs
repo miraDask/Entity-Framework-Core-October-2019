@@ -39,7 +39,10 @@
                 //Console.WriteLine(ImportCategoryProducts(context, categoryProductsFromJson));
 
                 //Problem 05
-                Console.WriteLine(GetProductsInRange(context));
+                //Console.WriteLine(GetProductsInRange(context));
+
+                //Problem 05
+                Console.WriteLine(GetSoldProducts(context));
             }
         }
 
@@ -110,13 +113,54 @@
                 })
                 .ToList();
 
-            var resolver = new DefaultContractResolver() {
+            var resolver = new DefaultContractResolver()
+            {
                 NamingStrategy = new CamelCaseNamingStrategy()
-            }; 
+            };
 
-            var outputJson = JsonConvert.SerializeObject(products,new JsonSerializerSettings(){ 
+            var outputJson = JsonConvert.SerializeObject(products, new JsonSerializerSettings()
+            {
                 Formatting = Formatting.Indented,
                 ContractResolver = resolver
+            });
+
+            return outputJson;
+        }
+
+        //Problem 06
+        public static string GetSoldProducts(ProductShopContext context)
+        {
+            var usersWithSoldProducts = context
+                .Users
+                .Where(u => u.ProductsSold.Any(sp => sp.Buyer != null))
+                .Select(u => new
+                {
+                    u.FirstName,
+                    u.LastName,
+                    SoldProducts = u.ProductsSold
+                                    .Where(p => p.Buyer != null)
+                                    .Select(p => new
+                                    {
+                                        p.Name,
+                                        p.Price,
+                                        BuyerFirstName = p.Buyer.FirstName,
+                                        BuyerLastName = p.Buyer.LastName
+                                    })
+                                    .ToList()
+                })
+                .OrderBy(u => u.LastName)
+                .ThenBy(u => u.FirstName)
+                .ToList();
+
+            var resolver = new DefaultContractResolver()
+            {
+                NamingStrategy = new CamelCaseNamingStrategy(),
+            };
+
+            var outputJson = JsonConvert.SerializeObject(usersWithSoldProducts, new JsonSerializerSettings()
+            {
+                ContractResolver = resolver,
+                Formatting = Formatting.Indented
             });
 
             return outputJson;
