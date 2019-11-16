@@ -18,6 +18,6 @@ namespace CarDealer.Models
 
         public Supplier Supplier { get; set; }
 
-        public ICollection<PartCar> PartCars { get; set; }
+        public ICollection<PartCar> PartCars { get; set; } = new HashSet<PartCar>();
     }
 }
