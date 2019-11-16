@@ -48,7 +48,7 @@
                 //Console.WriteLine(GetCategoriesByProductsCount(context));
 
                 //Problem 08
-                Console.WriteLine(GetUsersWithProducts(context));
+                //Console.WriteLine(GetUsersWithProducts(context));
             }
         }
 
