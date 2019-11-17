@@ -7,6 +7,7 @@ using CarDealer.Data;
 using CarDealer.DTO;
 using CarDealer.Models;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace CarDealer
 {
@@ -51,7 +52,11 @@ namespace CarDealer
                 //Console.WriteLine(GetLocalSuppliers(db));
 
                 //Problem 17:
-                Console.WriteLine(GetCarsWithTheirListOfParts(db));
+                //Console.WriteLine(GetCarsWithTheirListOfParts(db));
+
+                //Problem 18:
+                Console.WriteLine(GetTotalSalesByCustomer(db));
+
             }
         }
 
@@ -225,6 +230,33 @@ namespace CarDealer
                 
 
             var outputJson = JsonConvert.SerializeObject(carsWithParts, Formatting.Indented);
+            return outputJson;
+        }
+
+        //Problem 18:
+        public static string GetTotalSalesByCustomer(CarDealerContext context)
+        {
+            var customers = context.Customers
+                .Where(c => c.Sales.Count > 0)
+                .Select(c => new
+                {
+                    FullName = c.Name,
+                    BoughtCars = c.Sales.Count,
+                    SpentMoney = c.Sales.Sum(s => s.Car.PartCars.Sum(pc => pc.Part.Price))
+                })
+                .ToList();
+
+            var resolver = new DefaultContractResolver()
+            {
+                NamingStrategy = new CamelCaseNamingStrategy()
+            };
+
+            var outputJson = JsonConvert.SerializeObject(customers, new JsonSerializerSettings()
+            {
+                ContractResolver = resolver,
+                Formatting = Formatting.Indented
+            });
+
             return outputJson;
         }
     }
