@@ -55,7 +55,10 @@ namespace CarDealer
                 //Console.WriteLine(GetCarsWithTheirListOfParts(db));
 
                 //Problem 18:
-                Console.WriteLine(GetTotalSalesByCustomer(db));
+                //Console.WriteLine(GetTotalSalesByCustomer(db));
+
+                //Problem 19:
+                Console.WriteLine(GetSalesWithAppliedDiscount(db));
 
             }
         }
@@ -93,7 +96,7 @@ namespace CarDealer
         public static string ImportCars(CarDealerContext context, string inputJson)
         {
             var carDtos = JsonConvert.DeserializeObject<CarDto[]>(inputJson);
-            
+
             var partsIdInDb = context.Parts.Select(c => c.Id).ToList();
             var cars = new List<Car>();
             var partCars = new List<PartCar>();
@@ -159,17 +162,18 @@ namespace CarDealer
             var customers = context.Customers
                 .OrderBy(c => c.BirthDate)
                 .ThenByDescending(c => c.IsYoungDriver == false)
-                .Select(c => new { 
+                .Select(c => new
+                {
                     c.Name,
                     BirthDate = c.BirthDate.ToString("dd/MM/yyyy"),
                     c.IsYoungDriver
                 });
 
             var customersJson = JsonConvert.SerializeObject(customers, Formatting.Indented);
-            
+
             return customersJson;
         }
-        
+
         //Problem 15:
         public static string GetCarsFromMakeToyota(CarDealerContext context)
         {
@@ -177,7 +181,8 @@ namespace CarDealer
                 .OrderBy(c => c.Model)
                 .ThenByDescending(c => c.TravelledDistance)
                 .Where(c => c.Make == "Toyota")
-                .Select(c => new { 
+                .Select(c => new
+                {
                     c.Id,
                     c.Make,
                     c.Model,
@@ -220,14 +225,15 @@ namespace CarDealer
                         c.TravelledDistance
                     },
                     parts = c.PartCars
-                        .Select(pc => new {
+                        .Select(pc => new
+                        {
                             pc.Part.Name,
                             Price = pc.Part.Price.ToString("f2")
                         })
                         .ToArray()
                 })
                 .ToArray();
-                
+
 
             var outputJson = JsonConvert.SerializeObject(carsWithParts, Formatting.Indented);
             return outputJson;
@@ -256,6 +262,34 @@ namespace CarDealer
                 ContractResolver = resolver,
                 Formatting = Formatting.Indented
             });
+
+            return outputJson;
+        }
+
+        //Problem 19:
+        public static string GetSalesWithAppliedDiscount(CarDealerContext context)
+        {
+            var firstTenSales = context.Sales
+                .Take(10)
+                .Select(s => new
+                {
+                    car = new
+                    {
+                        s.Car.Make,
+                        s.Car.Model,
+                        s.Car.TravelledDistance
+                    },
+                    customerName = s.Customer.Name,
+                    Discount = s.Discount.ToString("f2"),
+                    price = s.Car.PartCars.Sum(pc => pc.Part.Price).ToString("f2"),
+                    priceWithDiscount = (s.Car.PartCars.Sum(pc => pc.Part.Price)
+                        - s.Car.PartCars.Sum(pc => pc.Part.Price)
+                        * (s.Discount / 100m))
+                        .ToString("f2")
+                })
+                .ToList();
+
+            var outputJson = JsonConvert.SerializeObject(firstTenSales, Formatting.Indented);
 
             return outputJson;
         }
