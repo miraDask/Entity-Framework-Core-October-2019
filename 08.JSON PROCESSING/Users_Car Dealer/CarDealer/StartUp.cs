@@ -34,8 +34,15 @@ namespace CarDealer
                 //Console.WriteLine(ImportCars(db, carsFromJson));
 
                 //Problem 12:
-                var carsFromJson = File.ReadAllText(@"./../../../Datasets/customers.json");
-                Console.WriteLine(ImportCustomers(db, carsFromJson));
+                //var carsFromJson = File.ReadAllText(@"./../../../Datasets/customers.json");
+                //Console.WriteLine(ImportCustomers(db, carsFromJson));
+
+                //Problem 13:
+                //var carsFromJson = File.ReadAllText(@"./../../../Datasets/sales.json");
+                //Console.WriteLine(ImportSales(db, carsFromJson));
+
+                //Problem 14:
+                Console.WriteLine(GetOrderedCustomers(db));
             }
         }
 
@@ -119,6 +126,34 @@ namespace CarDealer
             context.SaveChanges();
 
             return $"Successfully imported {customers.Length}."; ;
+        }
+
+        //Problem 13:
+        public static string ImportSales(CarDealerContext context, string inputJson)
+        {
+            var sales = JsonConvert.DeserializeObject<Sale[]>(inputJson);
+
+            context.Sales.AddRange(sales);
+            context.SaveChanges();
+
+            return $"Successfully imported {sales.Length}.";
+        }
+
+        //Problem 14:
+        public static string GetOrderedCustomers(CarDealerContext context)
+        {
+            var customers = context.Customers
+                .OrderBy(c => c.BirthDate)
+                .ThenByDescending(c => c.IsYoungDriver == false)
+                .Select(c => new { 
+                    c.Name,
+                    BirthDate = c.BirthDate.ToString("dd/MM/yyyy"),
+                    c.IsYoungDriver
+                });
+
+            var customersJson = JsonConvert.SerializeObject(customers, Formatting.Indented);
+            
+            return customersJson;
         }
     }
 }
