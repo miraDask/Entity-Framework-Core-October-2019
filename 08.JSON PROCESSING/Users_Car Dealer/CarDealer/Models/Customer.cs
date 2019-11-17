@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace CarDealer.Models
 {
@@ -14,6 +13,6 @@ namespace CarDealer.Models
 
         public bool IsYoungDriver { get; set; }
 
-        public ICollection<Sale> Sales { get; set; }
+        public ICollection<Sale> Sales { get; set; } = new HashSet<Sale>();
     }
 }
