@@ -46,10 +46,10 @@ namespace CarDealer
                 //Console.WriteLine(ImportSales(db, salesFromJson));
 
                 //Problem 14:
-                Console.WriteLine(GetOrderedCustomers(db));
+                //Console.WriteLine(GetOrderedCustomers(db));
 
                 //Problem 15:
-                //Console.WriteLine(GetCarsFromMakeToyota(db));
+                Console.WriteLine(GetCarsFromMakeToyota(db));
 
                 //Problem 16:
                 //Console.WriteLine(GetLocalSuppliers(db));
@@ -167,7 +167,7 @@ namespace CarDealer
                 .ThenByDescending(c => c.IsYoungDriver == false)
                 .ToList();
 
-            var customersMaped = Mapper.Map<IEnumerable<Customer>, IEnumerable<customerDto>>(customers);
+            var customersMaped = Mapper.Map<IEnumerable<Customer>, IEnumerable<CustomerDto>>(customers);
 
             var customersToJson = JsonConvert.SerializeObject(customersMaped, Formatting.Indented);
 
@@ -181,16 +181,11 @@ namespace CarDealer
                 .OrderBy(c => c.Model)
                 .ThenByDescending(c => c.TravelledDistance)
                 .Where(c => c.Make == "Toyota")
-                .Select(c => new
-                {
-                    c.Id,
-                    c.Make,
-                    c.Model,
-                    c.TravelledDistance
-                })
                 .ToList();
 
-            var outputJson = JsonConvert.SerializeObject(toyotaCars, Formatting.Indented);
+            var carsDto = Mapper.Map<IEnumerable<Car>, IEnumerable<CarToJsonDto>>(toyotaCars);
+
+            var outputJson = JsonConvert.SerializeObject(carsDto, Formatting.Indented);
 
             return outputJson;
         }

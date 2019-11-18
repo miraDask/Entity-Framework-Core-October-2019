@@ -11,8 +11,10 @@ namespace CarDealer
     {
         public CarDealerProfile()
         {
-            CreateMap<Customer, customerDto>()
+            CreateMap<Customer, CustomerDto>()
                 .ForMember(x => x.BirthDate, y => y.MapFrom(c => c.BirthDate.ToString("dd/MM/yyyy")));
+
+            CreateMap<Car, CarToJsonDto>();
         }
     }
 }
