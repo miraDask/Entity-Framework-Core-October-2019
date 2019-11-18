@@ -22,28 +22,31 @@ namespace CarDealer
                 //db.Database.EnsureDeleted();
                 //db.Database.EnsureCreated();
 
+                var suppliersFromJson = File.ReadAllText(@"./../../../Datasets/suppliers.json");
+                var partsFromJson = File.ReadAllText(@"./../../../Datasets/parts.json");
+                var carsFromJson = File.ReadAllText(@"./../../../Datasets/cars.json");
+                var customersFromJson = File.ReadAllText(@"./../../../Datasets/customers.json");
+                var salesFromJson = File.ReadAllText(@"./../../../Datasets/sales.json");
+
+                Mapper.Initialize(cfg => cfg.AddProfile<CarDealerProfile>());
+
                 ////Problem 09:
-                //var suppliersFromJson = File.ReadAllText(@"./../../../Datasets/suppliers.json");
                 //Console.WriteLine(ImportSuppliers(db, suppliersFromJson));
 
                 ////Problem 10:
-                //var partsFromJson = File.ReadAllText(@"./../../../Datasets/parts.json");
                 //Console.WriteLine(ImportParts(db, partsFromJson));
 
                 //Problem 11:
-                //var carsFromJson = File.ReadAllText(@"./../../../Datasets/cars.json");
                 //Console.WriteLine(ImportCars(db, carsFromJson));
 
                 //Problem 12:
-                //var carsFromJson = File.ReadAllText(@"./../../../Datasets/customers.json");
-                //Console.WriteLine(ImportCustomers(db, carsFromJson));
+                //Console.WriteLine(ImportCustomers(db, customersFromJson));
 
                 //Problem 13:
-                //var carsFromJson = File.ReadAllText(@"./../../../Datasets/sales.json");
-                //Console.WriteLine(ImportSales(db, carsFromJson));
+                //Console.WriteLine(ImportSales(db, salesFromJson));
 
                 //Problem 14:
-                //Console.WriteLine(GetOrderedCustomers(db));
+                Console.WriteLine(GetOrderedCustomers(db));
 
                 //Problem 15:
                 //Console.WriteLine(GetCarsFromMakeToyota(db));
@@ -58,7 +61,7 @@ namespace CarDealer
                 //Console.WriteLine(GetTotalSalesByCustomer(db));
 
                 //Problem 19:
-                Console.WriteLine(GetSalesWithAppliedDiscount(db));
+                //Console.WriteLine(GetSalesWithAppliedDiscount(db));
 
             }
         }
@@ -95,7 +98,7 @@ namespace CarDealer
         //Problem 11:
         public static string ImportCars(CarDealerContext context, string inputJson)
         {
-            var carDtos = JsonConvert.DeserializeObject<CarDto[]>(inputJson);
+            var carDtos = JsonConvert.DeserializeObject<CarFromJsonDto[]>(inputJson);
 
             var partsIdInDb = context.Parts.Select(c => c.Id).ToList();
             var cars = new List<Car>();
@@ -162,16 +165,13 @@ namespace CarDealer
             var customers = context.Customers
                 .OrderBy(c => c.BirthDate)
                 .ThenByDescending(c => c.IsYoungDriver == false)
-                .Select(c => new
-                {
-                    c.Name,
-                    BirthDate = c.BirthDate.ToString("dd/MM/yyyy"),
-                    c.IsYoungDriver
-                });
+                .ToList();
 
-            var customersJson = JsonConvert.SerializeObject(customers, Formatting.Indented);
+            var customersMaped = Mapper.Map<IEnumerable<Customer>, IEnumerable<customerDto>>(customers);
 
-            return customersJson;
+            var customersToJson = JsonConvert.SerializeObject(customersMaped, Formatting.Indented);
+
+            return customersToJson;
         }
 
         //Problem 15:
