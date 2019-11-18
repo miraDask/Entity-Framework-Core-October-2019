@@ -49,10 +49,10 @@ namespace CarDealer
                 //Console.WriteLine(GetOrderedCustomers(db));
 
                 //Problem 15:
-                Console.WriteLine(GetCarsFromMakeToyota(db));
+                //Console.WriteLine(GetCarsFromMakeToyota(db));
 
                 //Problem 16:
-                //Console.WriteLine(GetLocalSuppliers(db));
+                Console.WriteLine(GetLocalSuppliers(db));
 
                 //Problem 17:
                 //Console.WriteLine(GetCarsWithTheirListOfParts(db));
@@ -195,14 +195,11 @@ namespace CarDealer
         {
             var localSuppliers = context.Suppliers
                 .Where(s => s.IsImporter == false)
-                .Select(s => new
-                {
-                    s.Id,
-                    s.Name,
-                    PartsCount = s.Parts.Count
-                });
+                .ToList();
 
-            var outputJson = JsonConvert.SerializeObject(localSuppliers, Formatting.Indented);
+            var localSuppliersDtos = Mapper.Map<IEnumerable<Supplier>, IEnumerable<LocalSupplierDto>>(localSuppliers);
+
+            var outputJson = JsonConvert.SerializeObject(localSuppliersDtos, Formatting.Indented);
 
             return outputJson;
         }
