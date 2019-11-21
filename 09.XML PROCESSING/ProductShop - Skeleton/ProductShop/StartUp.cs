@@ -21,8 +21,12 @@ namespace ProductShop
                 //context.Database.EnsureCreated();
 
                 //Problem 01:
-                var inputXml = File.ReadAllText(@"./../../../Datasets/users.xml");
-                Console.WriteLine(ImportUsers(context, inputXml));
+                //var inputXml = File.ReadAllText(@"./../../../Datasets/users.xml");
+                //Console.WriteLine(ImportUsers(context, inputXml));
+
+                //Problem 02:
+                var inputXml = File.ReadAllText(@"./../../../Datasets/products.xml");
+                Console.WriteLine(ImportProducts(context, inputXml));
             }
         }
 
@@ -43,6 +47,26 @@ namespace ProductShop
             context.SaveChanges();
 
             return $"Successfully imported {users.Count}";
+        }
+
+        //Problem 02:
+        public static string ImportProducts(ProductShopContext context, string inputXml)
+        {
+            var xmlSerializer = new XmlSerializer(typeof(List<ProductImportDto>), new XmlRootAttribute("Products"));
+
+            var productDtos = new List<ProductImportDto>();
+
+            using (var reader = new StringReader(inputXml))
+            {
+                productDtos = (List<ProductImportDto>)xmlSerializer.Deserialize(reader);
+            }
+
+            var products = Mapper.Map<List<Product>>(productDtos);
+
+            context.Products.AddRange(products);
+            context.SaveChanges();
+
+            return $"Successfully imported {products.Count}";
         }
     }
 }
