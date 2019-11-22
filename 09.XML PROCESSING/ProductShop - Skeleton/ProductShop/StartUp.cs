@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace ProductShop
@@ -45,9 +46,13 @@ namespace ProductShop
                 //Console.WriteLine(GetProductsInRange(context));
 
                 //Problem 06
-                Console.WriteLine(GetSoldProducts(context));
+                //Console.WriteLine(GetSoldProducts(context));
 
-              
+                ////Problem 07
+                Console.WriteLine(GetCategoriesByProductsCount(context));
+
+                //Problem 08
+                //Console.WriteLine(GetUsersWithProducts(context));
             }
         }
 
@@ -209,6 +214,39 @@ namespace ProductShop
             using (var writer  = new StringWriter(sb))
             {
                 xmlSerializer.Serialize(writer, usersWithSoldProducts, namespaces);
+            }
+
+            return sb.ToString().TrimEnd();
+        }
+
+
+        //Problem 07:
+        public static string GetCategoriesByProductsCount(ProductShopContext context)
+        {
+            var sb = new StringBuilder();
+
+            var categoriesByProductsCount = context
+                .Categories
+                .Select(c => new CategoryExportDto
+                {
+                    Name = c.Name,
+                    Count = c.CategoryProducts.Count,
+                    AveragePrice = c.CategoryProducts.Average(cp => cp.Product.Price),
+                    TotalRevenue = c.CategoryProducts.Sum(cp => cp.Product.Price)
+                })
+                .OrderByDescending(c => c.Count)
+                .ThenBy(c => c.TotalRevenue)
+                .ToList();
+
+            var xmlSerializer = new XmlSerializer(typeof(List<CategoryExportDto>),
+                              new XmlRootAttribute("Categories"));
+
+            var namespaces = new XmlSerializerNamespaces(new[] { XmlQualifiedName.Empty });
+            namespaces.Add(string.Empty, string.Empty);
+
+            using (var writer = new StringWriter(sb))
+            {
+                xmlSerializer.Serialize(writer, categoriesByProductsCount, namespaces);
             }
 
             return sb.ToString().TrimEnd();
