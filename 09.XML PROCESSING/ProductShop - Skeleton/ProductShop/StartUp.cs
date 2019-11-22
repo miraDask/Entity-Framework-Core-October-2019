@@ -29,9 +29,13 @@ namespace ProductShop
                 //var inputXml = File.ReadAllText(@"./../../../Datasets/products.xml");
                 //Console.WriteLine(ImportProducts(context, inputXml));
 
-                //Problem 03:
-                var inputXml = File.ReadAllText(@"./../../../Datasets/categories.xml");
-                Console.WriteLine(ImportCategories(context, inputXml));
+                ////Problem 03:
+                //var inputXml = File.ReadAllText(@"./../../../Datasets/categories.xml");
+                //Console.WriteLine(ImportCategories(context, inputXml));
+
+                //Problem 04:
+                var inputXml = File.ReadAllText(@"./../../../Datasets/categories-products.xml");
+                Console.WriteLine(ImportCategoryProducts(context, inputXml));
             }
         }
 
@@ -95,6 +99,40 @@ namespace ProductShop
             context.SaveChanges();
             
             return $"Successfully imported {categories.Count}";
+        }
+
+        //Problem 04:
+        public static string ImportCategoryProducts(ProductShopContext context, string inputXml)
+        {
+
+            var xmlSerializer = 
+                new XmlSerializer(typeof(List<CategoryProductImportDto>),new XmlRootAttribute("CategoryProducts"));
+
+            var categoriesIds = context.Categories
+                .Select(c => c.Id)
+                .ToList();
+
+            var productsIds = context.Products
+                .Select(p => p.Id)
+                .ToList();
+
+            var categoriesProductsDtos = new List<CategoryProductImportDto>();
+
+            using (var reader = new StringReader(inputXml))
+            {
+                categoriesProductsDtos = (List<CategoryProductImportDto>)xmlSerializer.Deserialize(reader);
+            }
+
+            categoriesProductsDtos = categoriesProductsDtos
+                .Where(cp => categoriesIds.Contains(cp.CategoryId) 
+                          && productsIds.Contains(cp.ProductId))
+                .ToList();
+
+            var categoriesProducts = Mapper.Map<List<CategoryProduct>>(categoriesProductsDtos);
+            context.CategoryProducts.AddRange(categoriesProducts);
+            context.SaveChanges();
+
+            return $"Successfully imported {categoriesProducts.Count}";
         }
     }
 }
