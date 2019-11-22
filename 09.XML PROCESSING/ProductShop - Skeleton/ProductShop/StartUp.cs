@@ -1,11 +1,14 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using ProductShop.Data;
+using ProductShop.Dtos.Export;
 using ProductShop.Dtos.Import;
 using ProductShop.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Xml.Serialization;
 
 namespace ProductShop
@@ -34,8 +37,13 @@ namespace ProductShop
                 //Console.WriteLine(ImportCategories(context, inputXml));
 
                 //Problem 04:
-                var inputXml = File.ReadAllText(@"./../../../Datasets/categories-products.xml");
-                Console.WriteLine(ImportCategoryProducts(context, inputXml));
+                //var inputXml = File.ReadAllText(@"./../../../Datasets/categories-products.xml");
+                //Console.WriteLine(ImportCategoryProducts(context, inputXml));
+
+
+                //Problem 05
+                Console.WriteLine(GetProductsInRange(context));
+
             }
         }
 
@@ -133,6 +141,34 @@ namespace ProductShop
             context.SaveChanges();
 
             return $"Successfully imported {categoriesProducts.Count}";
+        }
+
+        //Problem 05:
+        public static string GetProductsInRange(ProductShopContext context)
+        {
+
+            var sb = new StringBuilder();
+
+            var xmlSerializer = new XmlSerializer(typeof(List<ProductInRangeDto>),
+                                new XmlRootAttribute("Products"));
+
+            var productsToXmlExport = context
+                .Products
+                .Where(p => p.Price >= 500 && p.Price <= 1000)
+                .OrderBy(p => p.Price)
+                .Take(10)
+                .ProjectTo<ProductInRangeDto>()
+                .ToList();
+
+            var namespaces = new XmlSerializerNamespaces();
+            namespaces.Add(string.Empty, string.Empty);
+
+            using (var writer = new StringWriter(sb))
+            {
+                xmlSerializer.Serialize(writer, productsToXmlExport, namespaces);
+            }
+
+            return sb.ToString().TrimEnd();
         }
     }
 }
