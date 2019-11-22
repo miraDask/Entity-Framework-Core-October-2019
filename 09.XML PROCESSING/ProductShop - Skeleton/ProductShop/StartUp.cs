@@ -42,8 +42,12 @@ namespace ProductShop
 
 
                 //Problem 05
-                Console.WriteLine(GetProductsInRange(context));
+                //Console.WriteLine(GetProductsInRange(context));
 
+                //Problem 06
+                Console.WriteLine(GetSoldProducts(context));
+
+              
             }
         }
 
@@ -166,6 +170,45 @@ namespace ProductShop
             using (var writer = new StringWriter(sb))
             {
                 xmlSerializer.Serialize(writer, productsToXmlExport, namespaces);
+            }
+
+            return sb.ToString().TrimEnd();
+        }
+
+        //Problem 06:
+        public static string GetSoldProducts(ProductShopContext context)
+        {
+            var sb = new StringBuilder();
+
+            var usersWithSoldProducts = context
+               .Users
+               .Where(u => u.ProductsSold.Any())
+               .Select(u => new UserExportDto
+               {
+                   FirstName = u.FirstName,
+                   LastName = u.LastName,
+                   SoldProducts = u.ProductsSold
+                                   .Select(p => new SoldProductexportDto
+                                   {
+                                       Name = p.Name,
+                                       Price = p.Price,
+                                   })
+                                   .ToList()
+               })
+               .OrderBy(u => u.LastName)
+               .ThenBy(u => u.FirstName)
+               .Take(5)
+               .ToList();
+
+            var xmlSerializer = new XmlSerializer(typeof(List<UserExportDto>),
+                                new XmlRootAttribute("Users"));
+
+            var namespaces = new XmlSerializerNamespaces();
+            namespaces.Add(string.Empty, string.Empty);
+
+            using (var writer  = new StringWriter(sb))
+            {
+                xmlSerializer.Serialize(writer, usersWithSoldProducts, namespaces);
             }
 
             return sb.ToString().TrimEnd();

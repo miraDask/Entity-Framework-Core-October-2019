@@ -20,6 +20,9 @@ namespace ProductShop
             CreateMap<Product, ProductInRangeDto>()
                 .ForMember(x => x.Buyer,
                            y => y.MapFrom(p => $"{p.Buyer.FirstName} {p.Buyer.LastName}"));
+            
+            CreateMap<Product, SoldProductexportDto>();
+
         }
     }
 }
