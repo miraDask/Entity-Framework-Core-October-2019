@@ -49,10 +49,10 @@ namespace ProductShop
                 //Console.WriteLine(GetSoldProducts(context));
 
                 ////Problem 07
-                Console.WriteLine(GetCategoriesByProductsCount(context));
+                //Console.WriteLine(GetCategoriesByProductsCount(context));
 
                 //Problem 08
-                //Console.WriteLine(GetUsersWithProducts(context));
+                Console.WriteLine(GetUsersWithProducts(context));
             }
         }
 
@@ -242,11 +242,58 @@ namespace ProductShop
                               new XmlRootAttribute("Categories"));
 
             var namespaces = new XmlSerializerNamespaces(new[] { XmlQualifiedName.Empty });
-            namespaces.Add(string.Empty, string.Empty);
 
             using (var writer = new StringWriter(sb))
             {
                 xmlSerializer.Serialize(writer, categoriesByProductsCount, namespaces);
+            }
+
+            return sb.ToString().TrimEnd();
+        }
+
+        //Problem 08
+        public static string GetUsersWithProducts(ProductShopContext context)
+        {
+            var sb = new StringBuilder();
+
+            var usersWithSoldProducts = context.Users
+                .Where(u => u.ProductsSold.Any())
+                .OrderByDescending(u => u.ProductsSold.Count())
+                .Select(u => new UserWithSoldProductsDto
+                {
+                    FirstName = u.FirstName,
+                    LastName = u.LastName,
+                    Age = u.Age,
+                    SoldProducts = new SoldProductWithCountDto
+                    {
+                        Count = u.ProductsSold.Count(),
+                        Products = u.ProductsSold
+                               .Select(p => new SoldProductexportDto
+                               {
+                                  Name = p.Name,
+                                  Price = p.Price
+                               })
+                               .OrderByDescending(p => p.Price)
+                               .ToList()
+                    }
+                })
+                .Take(10)
+                .ToList();
+
+            var users = new UsersWithCountExportDto()
+            {
+                Count = context.Users.Count(p => p.ProductsSold.Any()),
+                UserWithSoldProductsDto = usersWithSoldProducts
+            };
+
+            var xmlSerializer = new XmlSerializer(typeof(UsersWithCountExportDto),
+                                new XmlRootAttribute("Users"));
+
+            var namespaces = new XmlSerializerNamespaces(new[] { XmlQualifiedName.Empty });
+
+            using (var writer = new StringWriter(sb))
+            {
+                xmlSerializer.Serialize(writer, users, namespaces);
             }
 
             return sb.ToString().TrimEnd();
