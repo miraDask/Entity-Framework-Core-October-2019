@@ -30,9 +30,13 @@ namespace CarDealer
                 //var inputXml = File.ReadAllText("./../../../Datasets/parts.xml");
                 //Console.WriteLine(ImportParts(context, inputXml));
 
-                //Problem 11:
-                var inputXml = File.ReadAllText("./../../../Datasets/cars.xml");
-                Console.WriteLine(ImportCars(context, inputXml));
+                ////Problem 11:
+                //var inputXml = File.ReadAllText("./../../../Datasets/cars.xml");
+                //Console.WriteLine(ImportCars(context, inputXml));
+
+                //Problem 12:
+                var inputXml = File.ReadAllText("./../../../Datasets/customers.xml");
+                Console.WriteLine(ImportCustomers(context, inputXml));
 
             }
         }
@@ -128,6 +132,29 @@ namespace CarDealer
             context.SaveChanges();
 
             return $"Successfully imported {cars.Count}"; 
+        }
+
+        //Problem 12:
+        public static string ImportCustomers(CarDealerContext context, string inputXml)
+        {
+            var xmlSerializer = new XmlSerializer(typeof(List<CustomerImportDto>),
+                               new XmlRootAttribute("Customers"));
+
+
+            List<CustomerImportDto> customersDtos;
+
+            using (var reader = new StringReader(inputXml))
+            {
+                customersDtos = (List<CustomerImportDto>)xmlSerializer.Deserialize(reader);
+            }
+
+            var customers = Mapper.Map<List<CustomerImportDto>, List<Customer>>(customersDtos);
+            
+
+            context.Customers.AddRange(customers);
+            context.SaveChanges();
+
+            return $"Successfully imported {customers.Count}";
         }
     }
 }
