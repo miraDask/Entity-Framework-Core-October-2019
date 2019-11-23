@@ -30,14 +30,17 @@ namespace CarDealer
                 //var inputXml = File.ReadAllText("./../../../Datasets/parts.xml");
                 //Console.WriteLine(ImportParts(context, inputXml));
 
-                ////Problem 11:
+                //Problem 11:
                 //var inputXml = File.ReadAllText("./../../../Datasets/cars.xml");
                 //Console.WriteLine(ImportCars(context, inputXml));
 
                 //Problem 12:
-                var inputXml = File.ReadAllText("./../../../Datasets/customers.xml");
-                Console.WriteLine(ImportCustomers(context, inputXml));
+                //var inputXml = File.ReadAllText("./../../../Datasets/customers.xml");
+                //Console.WriteLine(ImportCustomers(context, inputXml));
 
+                //Problem 13:
+                var inputXml = File.ReadAllText("./../../../Datasets/sales.xml");
+                Console.WriteLine(ImportSales(context, inputXml));
             }
         }
 
@@ -155,6 +158,35 @@ namespace CarDealer
             context.SaveChanges();
 
             return $"Successfully imported {customers.Count}";
+        }
+
+        //Problem 13:
+        public static string ImportSales(CarDealerContext context, string inputXml)
+        {
+            var xmlSerializer = new XmlSerializer(typeof(List<SaleImportDto>),
+                               new XmlRootAttribute("Sales"));
+
+
+            List<SaleImportDto> salesDtos;
+
+            using (var reader = new StringReader(inputXml))
+            {
+                salesDtos = (List<SaleImportDto>)xmlSerializer.Deserialize(reader);
+            }
+
+            var carIds = context.Cars
+                .Select(c => c.Id)
+                .ToList();
+
+            var sales = Mapper.Map<List<SaleImportDto>, List<Sale>>(salesDtos)
+                .Where(s => carIds.Contains(s.CarId))
+                .ToList();
+
+
+            context.Sales.AddRange(sales);
+            context.SaveChanges();
+
+            return $"Successfully imported {sales.Count}";
         }
     }
 }
