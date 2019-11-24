@@ -56,7 +56,10 @@ namespace CarDealer
                 //Console.WriteLine(GetLocalSuppliers(context));
 
                 //Problem 17:
-                Console.WriteLine(GetCarsWithTheirListOfParts(context));
+                //Console.WriteLine(GetCarsWithTheirListOfParts(context));
+
+                //Problem 18:
+                Console.WriteLine(GetTotalSalesByCustomer(context));
             }
         }
 
@@ -327,6 +330,35 @@ namespace CarDealer
             using (var writer = new StringWriter(sb))
             {
                 xmlSerializer.Serialize(writer, carsDtos, namespaces);
+            }
+
+            return sb.ToString().TrimEnd();
+        }
+
+        //Problem 18:
+        public static string GetTotalSalesByCustomer(CarDealerContext context)
+        {
+            var xmlSerializer = new XmlSerializer(typeof(List<CustomerWithAttributesExportDto>),
+                                new XmlRootAttribute("customers"));
+
+            var customers = context.Customers
+              .Where(c => c.Sales.Count > 0)
+              .Select(c => new CustomerWithAttributesExportDto
+              {
+                  FullName = c.Name,
+                  BoughtCars = c.Sales.Count,
+                  SpentMoney = c.Sales.Sum(s => s.Car.PartCars.Sum(pc => pc.Part.Price))
+              })
+              .OrderByDescending(c => c.SpentMoney)
+              .ToList();
+
+            var sb = new StringBuilder();
+
+            var namespaces = new XmlSerializerNamespaces(new[] { XmlQualifiedName.Empty });
+
+            using (var writer = new StringWriter(sb))
+            {
+                xmlSerializer.Serialize(writer, customers, namespaces);
             }
 
             return sb.ToString().TrimEnd();
