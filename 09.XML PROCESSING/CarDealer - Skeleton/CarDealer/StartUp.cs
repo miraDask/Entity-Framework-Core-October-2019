@@ -50,8 +50,13 @@ namespace CarDealer
                 //Console.WriteLine(GetCarsWithDistance(context));
 
                 //Problem 15:
-                Console.WriteLine(GetCarsFromMakeBmw(context));
+                //Console.WriteLine(GetCarsFromMakeBmw(context));
 
+                //Problem 16:
+                //Console.WriteLine(GetLocalSuppliers(context));
+
+                //Problem 17:
+                Console.WriteLine(GetCarsWithTheirListOfParts(context));
             }
         }
 
@@ -247,6 +252,72 @@ namespace CarDealer
                 })
                 .OrderBy(C => C.Model)
                 .ThenByDescending(c => c.TravelledDistance)
+                .ToList();
+
+            var sb = new StringBuilder();
+
+            var namespaces = new XmlSerializerNamespaces(new[] { XmlQualifiedName.Empty });
+
+            using (var writer = new StringWriter(sb))
+            {
+                xmlSerializer.Serialize(writer, carsDtos, namespaces);
+            }
+
+            return sb.ToString().TrimEnd();
+        }
+
+        //Problem 16:
+        public static string GetLocalSuppliers(CarDealerContext context)
+        {
+            var xmlSerializer = new XmlSerializer(typeof(List<LocalSuppliersExportDto>),
+                                new XmlRootAttribute("suppliers"));
+
+            var localSuppliersDtos = context.Suppliers
+                .Where(s => !s.IsImporter)
+                .Select(s => new LocalSuppliersExportDto
+                {
+                    Id = s.Id,
+                    Name = s.Name,
+                    PartsCount = s.Parts.Count()
+                    
+                })
+                .ToList();
+
+            var sb = new StringBuilder();
+
+            var namespaces = new XmlSerializerNamespaces(new[] { XmlQualifiedName.Empty });
+
+            using (var writer = new StringWriter(sb))
+            {
+                xmlSerializer.Serialize(writer, localSuppliersDtos, namespaces);
+            }
+
+            return sb.ToString().TrimEnd();
+        }
+
+        //Problem 17:
+        public static string GetCarsWithTheirListOfParts(CarDealerContext context)
+        {
+            var xmlSerializer = new XmlSerializer(typeof(List<CarWithPartsExportDto>),
+                                new XmlRootAttribute("cars"));
+
+            var carsDtos = context.Cars
+                .OrderByDescending(c => c.TravelledDistance)
+                .ThenBy(c => c.Model)
+                .Select(c => new CarWithPartsExportDto
+                {
+                    Make = c.Make,
+                    Model = c.Model,
+                    TravelledDistance = c.TravelledDistance,
+                    Parts = c.PartCars
+                            .Select(pc => new PartWithNameAndPriceAttributesExportDto { 
+                                Name = pc.Part.Name,
+                                Price = pc.Part.Price
+                            })
+                            .OrderByDescending(p => p.Price)
+                            .ToList()
+                })
+                .Take(5)
                 .ToList();
 
             var sb = new StringBuilder();
