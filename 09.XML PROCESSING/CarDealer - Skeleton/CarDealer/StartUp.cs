@@ -47,7 +47,10 @@ namespace CarDealer
                 //Console.WriteLine(ImportSales(context, inputXml));
 
                 //Problem 14:
-                Console.WriteLine(GetCarsWithDistance(context));
+                //Console.WriteLine(GetCarsWithDistance(context));
+
+                //Problem 15:
+                Console.WriteLine(GetCarsFromMakeBmw(context));
 
             }
         }
@@ -217,6 +220,37 @@ namespace CarDealer
 
 
             var sb = new StringBuilder();
+            var namespaces = new XmlSerializerNamespaces(new[] { XmlQualifiedName.Empty });
+
+            using (var writer = new StringWriter(sb))
+            {
+                xmlSerializer.Serialize(writer, carsDtos, namespaces);
+            }
+
+            return sb.ToString().TrimEnd();
+        }
+
+        //Problem 15:
+        public static string GetCarsFromMakeBmw(CarDealerContext context)
+        {
+
+            var xmlSerializer = new XmlSerializer(typeof(List<CarsFromMakeBmwExportDto>),
+                                new XmlRootAttribute("cars"));
+
+            var carsDtos = context.Cars
+                .Where(c => c.Make == "BMW")
+                .Select(c => new CarsFromMakeBmwExportDto
+                {
+                    Id = c.Id,
+                    Model = c.Model,
+                    TravelledDistance = c.TravelledDistance
+                })
+                .OrderBy(C => C.Model)
+                .ThenByDescending(c => c.TravelledDistance)
+                .ToList();
+
+            var sb = new StringBuilder();
+
             var namespaces = new XmlSerializerNamespaces(new[] { XmlQualifiedName.Empty });
 
             using (var writer = new StringWriter(sb))
