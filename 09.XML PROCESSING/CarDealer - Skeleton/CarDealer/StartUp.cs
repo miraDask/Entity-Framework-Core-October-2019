@@ -59,7 +59,10 @@ namespace CarDealer
                 //Console.WriteLine(GetCarsWithTheirListOfParts(context));
 
                 //Problem 18:
-                Console.WriteLine(GetTotalSalesByCustomer(context));
+                //Console.WriteLine(GetTotalSalesByCustomer(context));
+
+                //Problem 19:
+                Console.WriteLine(GetSalesWithAppliedDiscount(context));
             }
         }
 
@@ -359,6 +362,42 @@ namespace CarDealer
             using (var writer = new StringWriter(sb))
             {
                 xmlSerializer.Serialize(writer, customers, namespaces);
+            }
+
+            return sb.ToString().TrimEnd();
+        }
+
+        //Problem 19:
+        public static string GetSalesWithAppliedDiscount(CarDealerContext context)
+        {
+            var xmlSerializer = new XmlSerializer(typeof(List<SaleExportDto>),
+                                new XmlRootAttribute("sales"));
+
+            var salesDtos = context.Sales
+                .Select(s => new SaleExportDto
+                {
+                    Car = new CarWithAttributesExportDto
+                    {
+                       Make = s.Car.Make,
+                       Model = s.Car.Model,
+                       TravelledDistance = s.Car.TravelledDistance
+                    },
+                    Discount = s.Discount,
+                    CustomerName = s.Customer.Name,
+                    Price = s.Car.PartCars.Sum(pc => pc.Part.Price),
+                    PriceWithDiscount = s.Car.PartCars.Sum(pc => pc.Part.Price)
+                        - s.Car.PartCars.Sum(pc => pc.Part.Price)
+                        * s.Discount / 100
+                })
+                .ToList();
+
+            var sb = new StringBuilder();
+
+            var namespaces = new XmlSerializerNamespaces(new[] { XmlQualifiedName.Empty });
+
+            using (var writer = new StringWriter(sb))
+            {
+                xmlSerializer.Serialize(writer, salesDtos, namespaces);
             }
 
             return sb.ToString().TrimEnd();
