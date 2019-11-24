@@ -2,9 +2,13 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
+using System.Xml;
 using System.Xml.Serialization;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using CarDealer.Data;
+using CarDealer.Dtos.Export;
 using CarDealer.Dtos.Import;
 using CarDealer.Models;
 
@@ -39,8 +43,12 @@ namespace CarDealer
                 //Console.WriteLine(ImportCustomers(context, inputXml));
 
                 //Problem 13:
-                var inputXml = File.ReadAllText("./../../../Datasets/sales.xml");
-                Console.WriteLine(ImportSales(context, inputXml));
+                //var inputXml = File.ReadAllText("./../../../Datasets/sales.xml");
+                //Console.WriteLine(ImportSales(context, inputXml));
+
+                //Problem 14:
+                Console.WriteLine(GetCarsWithDistance(context));
+
             }
         }
 
@@ -187,6 +195,36 @@ namespace CarDealer
             context.SaveChanges();
 
             return $"Successfully imported {sales.Count}";
+        }
+
+        //Problem 14:
+        public static string GetCarsWithDistance(CarDealerContext context)
+        {
+            var xmlSerializer = new XmlSerializer(typeof(List<CarExportDto>),
+                                new XmlRootAttribute("cars"));
+
+            var carsDtos = context.Cars
+                .Where(c => c.TravelledDistance > 2000000)
+                .OrderBy(c => c.Make)
+                .ThenBy(c => c.Model)
+                .Take(10)
+                .Select(c => new CarExportDto { 
+                      Make = c.Make,
+                      Model = c.Model,
+                      TravelledDistance = c.TravelledDistance
+                })
+                .ToList();
+
+
+            var sb = new StringBuilder();
+            var namespaces = new XmlSerializerNamespaces(new[] { XmlQualifiedName.Empty });
+
+            using (var writer = new StringWriter(sb))
+            {
+                xmlSerializer.Serialize(writer, carsDtos, namespaces);
+            }
+
+            return sb.ToString().TrimEnd();
         }
     }
 }

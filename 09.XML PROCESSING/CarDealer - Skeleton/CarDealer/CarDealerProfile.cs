@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CarDealer.Dtos.Export;
 using CarDealer.Dtos.Import;
 using CarDealer.Models;
 using System;
@@ -19,6 +20,8 @@ namespace CarDealer
                 .ForMember(x => x.BirthDate, y => y.MapFrom(c => DateTime.Parse(c.BirthDate)));
 
             CreateMap<SaleImportDto, Sale>();
+
+            CreateMap<Car, CarExportDto>();
         }
     }
 }
