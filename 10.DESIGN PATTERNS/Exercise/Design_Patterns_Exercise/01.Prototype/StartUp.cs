@@ -1,9 +1,8 @@
 ﻿namespace _01.Prototype
 {
-    using System;
     public class StartUp
     {
-        static void Main()
+        public static void Main()
         {
             var sandwichMenu = new SandwichMenu();
 
@@ -18,8 +17,6 @@
             var firstSandwich = sandwichMenu["BLT"].Clone() as Sandwich;
             var secondSandwich = sandwichMenu["ThreeMeatCombo"].Clone() as Sandwich;
             var thirtSandwich = sandwichMenu["Vegetarian"].Clone() as Sandwich;
-
-
         }
     }
 }
