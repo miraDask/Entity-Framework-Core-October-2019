@@ -1,10 +1,12 @@
 ﻿namespace PetStore.Data.Models
 {
+    using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    
     using static Validations.DataValidations;
 
-    public class Toy
+    public class Food
     {
         public int Id { get; set; }
 
@@ -12,8 +14,11 @@
         [MaxLength(NameMaxLength)]
         public string Name { get; set; }
 
-        [MaxLength(DescriptionMaxLength)]
-        public string Description { get; set; }
+        public double Weight { get; set; }
+
+        public DateTime ExpirationDate { get; set; }
+
+        public decimal DistributorPrice { get; set; }
 
         public decimal Price { get; set; }
 
@@ -25,6 +30,7 @@
 
         public Category Category { get; set; }
 
-        public ICollection<ToyOrder> ToyOrders { get; set; } = new HashSet<ToyOrder>();
+        public ICollection<FoodOrder> FoodOrders { get; set; } = new HashSet<FoodOrder>();
+
     }
 }

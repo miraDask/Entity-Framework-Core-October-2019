@@ -3,15 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29509.3
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetStore", "PetStore\PetStore.csproj", "{897AC14E-1E3C-4448-9638-0BB5339131CC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PetStore", "PetStore\PetStore.csproj", "{897AC14E-1E3C-4448-9638-0BB5339131CC}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{AF2C0743-17AF-429C-B914-31BE23C15D2B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{5199A3AA-E79C-4570-BA68-F3FF89950E79}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetStore.Data", "Data\PetStore.Data\PetStore.Data.csproj", "{556AA6B2-8D2C-4702-9F27-1CD59C20DF6A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PetStore.Data", "Data\PetStore.Data\PetStore.Data.csproj", "{556AA6B2-8D2C-4702-9F27-1CD59C20DF6A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetStore.Data.Models", "PetStore.Data.Models\PetStore.Data.Models.csproj", "{1F21CD4B-B0ED-4797-9A25-47D3A4426A79}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetStore.Services", "Services\PetStore.Services\PetStore.Services.csproj", "{8CA19CA2-0E28-4A6E-B439-9D8A37E99919}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetStore.Data.Models", "Data\PetStore.Data.Models\PetStore.Data.Models.csproj", "{9F4AE8C5-7383-4BCC-8B3C-3851B21C1661}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetStore.Services.Models", "Services\PetStore.Services.Models\PetStore.Services.Models.csproj", "{C1DF52F6-1067-45D9-962F-CFBB9F60BB22}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,17 +31,27 @@ Global
 		{556AA6B2-8D2C-4702-9F27-1CD59C20DF6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{556AA6B2-8D2C-4702-9F27-1CD59C20DF6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{556AA6B2-8D2C-4702-9F27-1CD59C20DF6A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1F21CD4B-B0ED-4797-9A25-47D3A4426A79}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1F21CD4B-B0ED-4797-9A25-47D3A4426A79}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1F21CD4B-B0ED-4797-9A25-47D3A4426A79}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1F21CD4B-B0ED-4797-9A25-47D3A4426A79}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8CA19CA2-0E28-4A6E-B439-9D8A37E99919}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8CA19CA2-0E28-4A6E-B439-9D8A37E99919}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8CA19CA2-0E28-4A6E-B439-9D8A37E99919}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8CA19CA2-0E28-4A6E-B439-9D8A37E99919}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F4AE8C5-7383-4BCC-8B3C-3851B21C1661}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F4AE8C5-7383-4BCC-8B3C-3851B21C1661}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F4AE8C5-7383-4BCC-8B3C-3851B21C1661}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F4AE8C5-7383-4BCC-8B3C-3851B21C1661}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C1DF52F6-1067-45D9-962F-CFBB9F60BB22}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C1DF52F6-1067-45D9-962F-CFBB9F60BB22}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C1DF52F6-1067-45D9-962F-CFBB9F60BB22}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C1DF52F6-1067-45D9-962F-CFBB9F60BB22}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{556AA6B2-8D2C-4702-9F27-1CD59C20DF6A} = {AF2C0743-17AF-429C-B914-31BE23C15D2B}
-		{1F21CD4B-B0ED-4797-9A25-47D3A4426A79} = {AF2C0743-17AF-429C-B914-31BE23C15D2B}
+		{8CA19CA2-0E28-4A6E-B439-9D8A37E99919} = {5199A3AA-E79C-4570-BA68-F3FF89950E79}
+		{9F4AE8C5-7383-4BCC-8B3C-3851B21C1661} = {AF2C0743-17AF-429C-B914-31BE23C15D2B}
+		{C1DF52F6-1067-45D9-962F-CFBB9F60BB22} = {5199A3AA-E79C-4570-BA68-F3FF89950E79}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2F66E865-AC5F-4BE5-9E11-4AE91CA14598}
