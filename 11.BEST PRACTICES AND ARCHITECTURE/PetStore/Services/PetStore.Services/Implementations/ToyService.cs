@@ -1,6 +1,7 @@
 ﻿namespace PetStore.Services.Implementations
 {
     using System;
+    using System.Linq;
     using PetStore.Data;
     using PetStore.Data.Models;
     using PetStore.Services.Models.Toy;
@@ -8,8 +9,13 @@
     public class ToyService : IToyService
     {
         private readonly PetStoreDbContext db;
+        private readonly UserService userService;
 
-        public ToyService(PetStoreDbContext data) => this.db = data;
+        public ToyService(PetStoreDbContext data, UserService userService)
+        {
+            this.db = data;
+            this.userService = userService;
+        } 
 
         public void ByuFromDistributor(string name, string description, decimal price, double profit, int brandId, int categoryId)
         {
@@ -60,6 +66,40 @@
             };
 
             db.Toys.Add(toy);
+            db.SaveChanges();
+        }
+
+        public bool Exists(int toyId)
+            => this.db.Toys.Any(t => t.Id == toyId);
+
+        public void SellToy(int toyId, int userId)
+        {
+            if (!this.Exists(toyId))
+            {
+                throw new ArgumentException($"There is no toy with id {toyId} in the datebase");
+
+            }
+
+            if (!this.userService.Exists(userId))
+            {
+                throw new ArgumentException($"There is no user with id {userId} in the datebase");
+            }
+
+            var order = new Order()
+            {
+                PurchaseDate = DateTime.Now,
+                Status = Data.Models.Enumerations.OrderStatus.Done,
+                UserId = userId
+            };
+
+            var toyOrder = new ToyOrder()
+            {
+                ToyId = toyId,
+                Order = order
+            };
+
+            db.Orders.Add(order);
+            db.ToyOrders.Add(toyOrder);
             db.SaveChanges();
         }
     }

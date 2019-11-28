@@ -18,6 +18,10 @@
 
         public DbSet<Order> Orders { get; set; }
 
+        public DbSet<FoodOrder> FoodOrders { get; set; }
+
+        public DbSet<ToyOrder> ToyOrders { get; set; }
+
         public DbSet<Pet> Pets { get; set; }
 
         public DbSet<Toy> Toys { get; set; }

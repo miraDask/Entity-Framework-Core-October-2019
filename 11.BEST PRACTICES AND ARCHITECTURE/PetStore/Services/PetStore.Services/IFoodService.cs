@@ -17,5 +17,9 @@
             );
 
         void BuyFromDistributor(FoodInputServiceModel food);
+
+        void SellFood(int foodId, int userId);
+
+        bool Exists(int foodId);
     }
 }
