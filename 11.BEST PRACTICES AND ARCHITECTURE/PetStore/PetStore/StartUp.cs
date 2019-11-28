@@ -13,9 +13,13 @@
 
             using (db)
             {
-                var foodService = new FoodService(db);
+                //var foodService = new FoodService(db);
 
-                foodService.BuyFromDistributor("Dog food", 1, 1, 0.2, DateTime.Now, 2,2 );
+                //foodService.BuyFromDistributor("Dog food", 1, 1, 0.2, DateTime.Now, 2,2 );
+
+                var toyService = new ToyService(db);
+
+                toyService.ByuFromDistributor("Ball", "", 1, 0.2, 1, 1);
             }
         }
     }
