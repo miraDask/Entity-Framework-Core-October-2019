@@ -1,6 +1,7 @@
 ﻿namespace PetStore.Data.Configurations
 {
     using Models;
+
     using Microsoft.EntityFrameworkCore;
 
     public class ToyOrderConfiguration : IEntityTypeConfiguration<ToyOrder>

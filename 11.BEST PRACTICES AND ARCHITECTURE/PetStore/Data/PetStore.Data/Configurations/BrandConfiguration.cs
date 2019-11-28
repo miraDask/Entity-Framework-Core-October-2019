@@ -1,8 +1,9 @@
 ﻿namespace PetStore.Data.Configurations
 {
+    using Models;
+
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
-    using PetStore.Data.Models;
 
     public class BrandConfiguration : IEntityTypeConfiguration<Brand>
     {

@@ -2,9 +2,10 @@
 {
     using System;
     using System.Linq;
-    using PetStore.Data;
-    using PetStore.Data.Models;
-    using PetStore.Data.Models.Enumerations;
+
+    using Data;
+    using Data.Models;
+    using Data.Models.Enumerations;
 
     public class PetService : IPetService
     {

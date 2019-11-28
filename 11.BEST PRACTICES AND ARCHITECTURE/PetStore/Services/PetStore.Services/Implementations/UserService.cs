@@ -1,8 +1,9 @@
 ﻿namespace PetStore.Services.Implementations
 {
     using System.Linq;
-    using PetStore.Data;
-    using PetStore.Data.Models;
+
+    using Data;
+    using Data.Models;
 
     public class UserService : IUserService
     {

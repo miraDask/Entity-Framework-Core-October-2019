@@ -1,7 +1,8 @@
 ﻿namespace PetStore.Services
 {
-    using PetStore.Services.Models.Food;
     using System;
+
+    using Models.Food;
    
     public interface IFoodService
     {

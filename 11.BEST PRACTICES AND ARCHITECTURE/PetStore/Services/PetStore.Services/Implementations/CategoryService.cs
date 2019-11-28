@@ -1,6 +1,7 @@
 ﻿namespace PetStore.Services.Implementations
 {
     using System.Linq;
+
     using PetStore.Data;
 
     public class CategoryService : ICategoryService

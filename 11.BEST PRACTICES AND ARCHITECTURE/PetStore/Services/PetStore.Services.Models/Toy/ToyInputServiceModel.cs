@@ -1,6 +1,5 @@
 ﻿namespace PetStore.Services.Models.Toy
 {
-
     public class ToyInputServiceModel
     {
         public string Name { get; set; }

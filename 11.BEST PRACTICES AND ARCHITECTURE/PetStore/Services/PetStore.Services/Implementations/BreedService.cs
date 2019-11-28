@@ -2,8 +2,9 @@
 {
     using System;
     using System.Linq;
-    using PetStore.Data;
-    using PetStore.Data.Models;
+
+    using Data;
+    using Data.Models;
   
     public class BreedService : IBreedService
     {

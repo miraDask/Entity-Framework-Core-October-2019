@@ -2,9 +2,10 @@
 {
     using System;
     using System.Linq;
-    using PetStore.Data;
-    using PetStore.Data.Models;
-    using PetStore.Services.Models.Toy;
+
+    using Data;
+    using Data.Models;
+    using Models.Toy;
 
     public class ToyService : IToyService
     {

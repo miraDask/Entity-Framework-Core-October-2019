@@ -2,9 +2,9 @@
 {
     using System;
 
-    using PetStore.Data;
+    using Data;
+    using Data.Models;
     using Models.Food;
-    using PetStore.Data.Models;
     using System.Linq;
 
     public class FoodService : IFoodService

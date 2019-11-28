@@ -22,15 +22,15 @@
 
                 //var toyService = new ToyService(db);
 
-                //toyService.ByuFromDistributor("Ball", "", 1, 0.2, 1, 1);
-                //breedService.AddBreed("Huski");
-                var userService = new UserService(db);
-                var categoryService = new CategoryService(db);
-                var breedService = new BreedService(db);
-                var petService = new PetService(db,breedService, categoryService, userService);
+                ////toyService.ByuFromDistributor("Ball", "", 1, 0.2, 1, 1);
+                ////breedService.AddBreed("Huski");
+                //var userService = new UserService(db);
+                //var categoryService = new CategoryService(db);
+                //var breedService = new BreedService(db);
+                //var petService = new PetService(db,breedService, categoryService, userService);
 
-                //petService.ByuPet(Gender.Male, DateTime.Now, 1, "very small dog", 1, 2);
-                petService.SellPet(1, 1);
+                ////petService.ByuPet(Gender.Male, DateTime.Now, 1, "very small dog", 1, 2);
+                //petService.SellPet(1, 1);
 
             }
         }

@@ -2,8 +2,8 @@
 {
     using System;
     using System.ComponentModel.DataAnnotations;
+
     using Enumerations;
-    
     using static Validations.DataValidations;
 
     public class Pet

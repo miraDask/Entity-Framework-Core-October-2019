@@ -1,8 +1,6 @@
 ﻿namespace PetStore.Services.Models.Food
 {
     using System;
-    using System.Collections.Generic;
-    using System.Text;
 
      public class FoodInputServiceModel
     {

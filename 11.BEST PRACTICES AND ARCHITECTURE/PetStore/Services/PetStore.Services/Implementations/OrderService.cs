@@ -1,9 +1,10 @@
-﻿using PetStore.Data;
-using PetStore.Data.Models.Enumerations;
-using System;
-
-namespace PetStore.Services.Implementations
+﻿namespace PetStore.Services.Implementations
 {
+    using System;
+
+    using Data;
+    using Data.Models.Enumerations;
+
     public class OrderService : IOrderService
     {
         private readonly PetStoreDbContext db;

@@ -1,9 +1,6 @@
 ﻿namespace PetStore.Data
 {
-    using System;
-
     using Models;
-
     using Microsoft.EntityFrameworkCore;
 
     public class PetStoreDbContext : DbContext

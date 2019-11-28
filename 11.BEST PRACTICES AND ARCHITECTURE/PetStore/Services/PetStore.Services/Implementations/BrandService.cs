@@ -5,10 +5,10 @@
     using System.Collections.Generic;
     
     using Data;
+    using Data.Models;
     using Data.Models.Validations;
-    using PetStore.Data.Models;
-    using Services.Models.Brand;
-    using PetStore.Services.Models.Toy;
+    using Models.Brand;
+    using Models.Toy;
 
     public class BrandService : IBrandService
     {
