@@ -1,7 +1,7 @@
 ﻿namespace PetStore.Services.Implementations
 {
     using System;
-  
+    using System.Linq;
     using PetStore.Data;
     using PetStore.Data.Models;
   
@@ -31,5 +31,9 @@
             this.db.Breeds.Add(breed);
             db.SaveChanges();
         }
+
+        public bool Exists(int breedId)
+            => this.db.Breeds.Any(b => b.Id == breedId);
+             
     }
 }
