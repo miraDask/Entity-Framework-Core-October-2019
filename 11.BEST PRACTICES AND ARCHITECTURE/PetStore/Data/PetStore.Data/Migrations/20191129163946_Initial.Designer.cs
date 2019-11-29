@@ -10,8 +10,8 @@ using PetStore.Data;
 namespace PetStore.Data.Migrations
 {
     [DbContext(typeof(PetStoreDbContext))]
-    [Migration("20191128145253_AddDistributorPriceToToyAndFood")]
-    partial class AddDistributorPriceToToyAndFood
+    [Migration("20191129163946_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -127,7 +127,7 @@ namespace PetStore.Data.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("FoodOrder");
+                    b.ToTable("FoodOrders");
                 });
 
             modelBuilder.Entity("PetStore.Data.Models.Order", b =>
@@ -242,7 +242,7 @@ namespace PetStore.Data.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("ToyOrder");
+                    b.ToTable("ToyOrders");
                 });
 
             modelBuilder.Entity("PetStore.Data.Models.User", b =>

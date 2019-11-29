@@ -1,8 +1,10 @@
 ﻿namespace PetStore
 {
     using System;
+    using System.Linq;
     using Microsoft.EntityFrameworkCore;
     using PetStore.Data;
+    using PetStore.Data.Models;
     using PetStore.Data.Models.Enumerations;
     using PetStore.Services.Implementations;
 
@@ -14,24 +16,59 @@
 
             using (db)
             {
-                //var toyService = new ToyService(db, userService);
+                // Seeding Database
+                //for (int i = 0; i < 10; i++)
+                //{
+                //    var breed = new Breed
+                //    {
+                //        Name = "Breed " + i,
+                //    };
 
-                //userService.RegisterUser("Pesho", "pessskata@gmail.com");
-                // toyService.SellToy(1, 1);
-                //foodService.BuyFromDistributor("Dog food", 1, 1, 0.2, DateTime.Now, 2,2 );
+                //    db.Breeds.Add(breed);
 
-                //var toyService = new ToyService(db);
+                //}
 
-                ////toyService.ByuFromDistributor("Ball", "", 1, 0.2, 1, 1);
-                ////breedService.AddBreed("Huski");
-                //var userService = new UserService(db);
-                //var categoryService = new CategoryService(db);
-                //var breedService = new BreedService(db);
-                //var petService = new PetService(db,breedService, categoryService, userService);
+                //db.SaveChanges();
 
-                ////petService.ByuPet(Gender.Male, DateTime.Now, 1, "very small dog", 1, 2);
-                //petService.SellPet(1, 1);
+                //for (int i = 0; i < 30; i++)
+                //{
+                //    var category = new Category
+                //    {
+                //        Name = "Category " + i,
+                //        Description = "Category Description " + i
+                //    };
 
+                //    db.Categories.Add(category);
+                //}
+
+                //db.SaveChanges();
+
+                //for (int i = 0; i < 100; i++)
+                //{
+                //    var category = db.Categories
+                //        .OrderBy(c => Guid.NewGuid())
+                //        .FirstOrDefault();
+
+                //    var breed = db.Breeds
+                //       .OrderBy(c => Guid.NewGuid())
+                //       .FirstOrDefault();
+
+                //    var pet = new Pet
+                //    {
+                //        DateOfBirth = DateTime.UtcNow.AddDays(-60 + i),
+                //        Price = 50 + i,
+                //        Gender = (Gender)(i % 2),
+                //        Desctiption = "Pet Description " + i,
+                //        CategoryId = category.Id,
+                //        BreedId = breed.Id
+                //    };
+
+                //    db.Pets.Add(pet);
+                //    category.Pets.Add(pet);
+                //    breed.Pets.Add(pet);
+                //}
+
+                //db.SaveChanges();
             }
         }
     }

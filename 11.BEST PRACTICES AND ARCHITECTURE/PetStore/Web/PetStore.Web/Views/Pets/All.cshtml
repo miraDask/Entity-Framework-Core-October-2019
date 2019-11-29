@@ -1,0 +1,34 @@
+﻿@model AllPetsViewModel
+
+@{
+    ViewData["Title"] = "All";
+}
+
+<h1>All Pets</h1>
+
+<div>
+    <a href="/Pets/All?page=@Model.PrevPage" class="btn float-left btn-info @(Model.PreviousDisabled ? "disabled" : string.Empty)" >Prev</a>
+    <a href="/Pets/All?page=@Model.NextPage" class="btn float-right btn-info @(Model.NextDisabled ? "disabled" : string.Empty)">Next</a>
+</div>
+<br />
+<br />
+
+<table class="table table-bordered table-striped">
+    <tr>
+        <th>Category</th>
+        <th>Breed</th>
+        <th>Gender</th>
+        <th>Price</th>
+    </tr>
+    @foreach (var pet in Model.AllPets)
+    {
+        <tr>
+            <td>@pet.Categoty</td>
+            <td>@pet.Breed</td>
+            <td> @pet.Gender</td>
+            <td>@pet.Price</td>
+        </tr>
+    }
+</table>
+
+
