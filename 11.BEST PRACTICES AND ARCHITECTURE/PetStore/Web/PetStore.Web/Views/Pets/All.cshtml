@@ -7,8 +7,15 @@
 <h1>All Pets</h1>
 
 <div>
-    <a href="/Pets/All?page=@Model.PrevPage" class="btn float-left btn-info @(Model.PreviousDisabled ? "disabled" : string.Empty)" >Prev</a>
-    <a href="/Pets/All?page=@Model.NextPage" class="btn float-right btn-info @(Model.NextDisabled ? "disabled" : string.Empty)">Next</a>
+    @if (!Model.PreviousDisabled)
+    {
+        <a href="/Pets/All?page=@Model.PrevPage" class="btn float-left btn-info">Prev</a>
+    }
+
+    @if (!Model.NextDisabled)
+    {
+        <a href="/Pets/All?page=@Model.NextPage" class="btn float-right btn-info">Next</a>
+    }
 </div>
 <br />
 <br />
@@ -19,6 +26,7 @@
         <th>Breed</th>
         <th>Gender</th>
         <th>Price</th>
+        <th></th>
     </tr>
     @foreach (var pet in Model.AllPets)
     {
@@ -27,6 +35,9 @@
             <td>@pet.Breed</td>
             <td> @pet.Gender</td>
             <td>@pet.Price</td>
+            <td class="text-center">
+                <a href="/Pets/Delete/@pet.Id" class="btn btn-danger btn-sm" >Delete</a>
+            </td>
         </tr>
     }
 </table>

@@ -16,5 +16,9 @@
         bool Exists(int petId);
 
         int TotalPets();
+
+        PetListingServiceModel PetDetails(int id);
+
+        bool DeletePet(int id);
     }
 }

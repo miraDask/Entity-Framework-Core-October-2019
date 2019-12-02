@@ -1,13 +1,8 @@
 ﻿namespace PetStore.Web.Controllers
 {
-    using System;
-    using System.Linq;
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Mvc;
     using PetStore.Services;
-    using PetStore.Services.Models.Pet;
     using PetStore.Web.Models.Pets;
 
     public class PetsController : Controller
@@ -32,6 +27,30 @@
             };
 
             return View(model);
+        }
+
+        public IActionResult Delete(int id)
+        {
+            var pet = this.pets.PetDetails(id);
+
+            if (pet == null)
+            {
+                return NotFound();
+            }
+
+            return View(pet);
+        }
+
+        public IActionResult ConfirmDelete(int id)
+        {
+            var isDeleted = this.pets.DeletePet(id);
+
+            if (!isDeleted)
+            {
+                return BadRequest(); 
+            }
+
+            return RedirectToAction(nameof(All));
         }
     }
 }

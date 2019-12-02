@@ -108,5 +108,34 @@
         }
 
         public int TotalPets() => this.db.Pets.Count();
+
+        public PetListingServiceModel PetDetails(int id)
+            => this.db.Pets
+                    .Where(p => p.Id == id)
+                    .Select(p => new PetListingServiceModel()
+                    {
+                        Id = p.Id,
+                        Gender = ((Gender)p.Gender).ToString(),
+                        Description = p.Desctiption,
+                        Price = p.Price,
+                        Breed = p.Breed.Name,
+                        Categoty = p.Category.Name
+                    })
+                    .FirstOrDefault();
+
+        public bool DeletePet(int id)
+        {
+            var pet = this.db.Pets.Find(id);
+
+            if (pet == null)
+            {
+                return false;
+            }
+
+            db.Pets.Remove(pet);
+            db.SaveChanges();
+
+            return true;
+        }
     }
 }
