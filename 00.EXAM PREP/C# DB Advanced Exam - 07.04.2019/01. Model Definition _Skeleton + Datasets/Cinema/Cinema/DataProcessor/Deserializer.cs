@@ -3,8 +3,11 @@
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using System.Globalization;
+    using System.IO;
     using System.Linq;
     using System.Text;
+    using System.Xml.Serialization;
     using Cinema.Data.Models;
     using Cinema.DataProcessor.ImportDto;
     using Data;
@@ -99,6 +102,83 @@
             return sb.ToString().TrimEnd();
         }
 
+        private static void AddSeatsToContext(int seatsCount, Hall hall, CinemaContext context)
+        {
+            for (int i = 0; i < seatsCount; i++)
+            {
+                var seat = new Seat
+                {
+                    Hall = hall
+                };
+
+                context.Seats.Add(seat);
+            }
+
+            context.SaveChanges();
+        }
+
+        public static string ImportProjections(CinemaContext context, string xmlString)
+        {
+            var sb = new StringBuilder();
+
+            var serializer = new XmlSerializer(typeof(List<ProjectionDto>), 
+                             new XmlRootAttribute("Projections"));
+
+            List<ProjectionDto> projectionDtos;
+
+            using (var reader = new StringReader(xmlString))
+            {
+                projectionDtos = (List<ProjectionDto>)serializer.Deserialize(reader);
+
+                foreach (var dto in projectionDtos)
+                {
+                    if (IsValid(dto) 
+                            && MovieIdExists(context, dto.MovieId)
+                            && HallIdExists(context, dto.HallId))
+                    {
+                        var projection = new Projection
+                        {
+                            DateTime = DateTime.Parse(dto.DateTime),
+                            MovieId = dto.MovieId,
+                            HallId = dto.HallId
+                        };
+
+                        context.Projections.Add(projection);
+                        sb.AppendLine(string.Format(SuccessfulImportProjection,
+                            projection.Movie.Title, 
+                            projection.DateTime.ToString("MM/dd/yyyy", CultureInfo.InvariantCulture)));
+                    }
+                    else
+                    {
+                        sb.AppendLine(ErrorMessage);
+                    }
+                }
+
+                context.SaveChanges();
+            }
+
+            return sb.ToString().TrimEnd();
+        }
+
+        public static string ImportCustomerTickets(CinemaContext context, string xmlString)
+        {
+            throw new NotImplementedException();
+        }
+        
+        private static bool MovieIdExists(CinemaContext context, int movieId)
+            => context.Movies.Any(m => m.Id == movieId);
+
+        private static bool HallIdExists(CinemaContext context, int hallId)
+            => context.Halls.Any(h => h.Id == hallId);
+
+        private static bool IsValid(object obj)
+        {
+            var validationContext = new ValidationContext(obj);
+            var result = new List<ValidationResult>();
+
+            return Validator.TryValidateObject(obj, validationContext, result, true);    // true => for all anotations check
+        }
+
         private static string GetProjectionType(HallWithSeatsCountDto dto)
         {
             var projectionType = String.Empty;
@@ -117,39 +197,6 @@
             }
 
             return projectionType;
-        }
-
-        private static void AddSeatsToContext(int seatsCount, Hall hall, CinemaContext context)
-        {
-            for (int i = 0; i < seatsCount; i++)
-            {
-                var seat = new Seat
-                {
-                    Hall = hall
-                };
-
-                context.Seats.Add(seat);
-            }
-
-            context.SaveChanges();
-        }
-
-        public static string ImportProjections(CinemaContext context, string xmlString)
-        {
-            throw new NotImplementedException();
-        }
-
-        public static string ImportCustomerTickets(CinemaContext context, string xmlString)
-        {
-            throw new NotImplementedException();
-        }
-
-        private static bool IsValid(object obj)
-        {
-            var validationContext = new ValidationContext(obj);
-            var result = new List<ValidationResult>();
-
-            return Validator.TryValidateObject(obj, validationContext, result, true);    // true => for all anotations check
         }
     }
 }
