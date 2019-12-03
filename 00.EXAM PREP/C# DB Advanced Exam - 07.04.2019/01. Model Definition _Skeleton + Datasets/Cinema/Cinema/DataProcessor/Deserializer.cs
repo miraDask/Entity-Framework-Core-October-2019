@@ -102,26 +102,11 @@
             return sb.ToString().TrimEnd();
         }
 
-        private static void AddSeatsToContext(int seatsCount, Hall hall, CinemaContext context)
-        {
-            for (int i = 0; i < seatsCount; i++)
-            {
-                var seat = new Seat
-                {
-                    Hall = hall
-                };
-
-                context.Seats.Add(seat);
-            }
-
-            context.SaveChanges();
-        }
-
         public static string ImportProjections(CinemaContext context, string xmlString)
         {
             var sb = new StringBuilder();
 
-            var serializer = new XmlSerializer(typeof(List<ProjectionDto>), 
+            var serializer = new XmlSerializer(typeof(List<ProjectionDto>),
                              new XmlRootAttribute("Projections"));
 
             List<ProjectionDto> projectionDtos;
@@ -132,7 +117,7 @@
 
                 foreach (var dto in projectionDtos)
                 {
-                    if (IsValid(dto) 
+                    if (IsValid(dto)
                             && MovieIdExists(context, dto.MovieId)
                             && HallIdExists(context, dto.HallId))
                     {
@@ -145,7 +130,7 @@
 
                         context.Projections.Add(projection);
                         sb.AppendLine(string.Format(SuccessfulImportProjection,
-                            projection.Movie.Title, 
+                            projection.Movie.Title,
                             projection.DateTime.ToString("MM/dd/yyyy", CultureInfo.InvariantCulture)));
                     }
                     else
@@ -162,14 +147,66 @@
 
         public static string ImportCustomerTickets(CinemaContext context, string xmlString)
         {
-            throw new NotImplementedException();
+            var sb = new StringBuilder();
+
+            var serializer = new XmlSerializer(typeof(List<CustomerDto>),
+                             new XmlRootAttribute("Customers"));
+            
+            using (var reader = new StringReader(xmlString))
+            {
+
+                var customerDtos = (List<CustomerDto>)serializer.Deserialize(reader);
+
+                foreach (var dto in customerDtos)
+                {
+                    if (IsValid(dto) && AllTicketsAreValid(context, dto.Tickets))
+                    {
+                        var customer = new Customer
+                        {
+                            FirstName = dto.FirstName,
+                            LastName = dto.LastName,
+                            Age = dto.Age,
+                            Balance = dto.Balance
+                        };
+
+                        context.Customers.Add(customer);
+                        AddTicketsToContext(dto.Tickets, customer.Id, context);
+                        sb.AppendLine(string.Format(SuccessfulImportCustomerTicket,
+                            dto.FirstName, dto.LastName, dto.Tickets.Count));
+                    }
+                    else
+                    {
+                        sb.AppendLine(ErrorMessage);
+                    }
+                }
+
+                context.SaveChanges();
+            }
+
+            return sb.ToString().TrimEnd();
         }
-        
+
+        private static bool AllTicketsAreValid(CinemaContext context, ICollection<TicketDto> tickets)
+        {
+            foreach (var ticket in tickets)
+            {
+                if (!IsValid(ticket) || !ProjectionIdExists(context, ticket.ProjectionId))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
         private static bool MovieIdExists(CinemaContext context, int movieId)
             => context.Movies.Any(m => m.Id == movieId);
 
         private static bool HallIdExists(CinemaContext context, int hallId)
             => context.Halls.Any(h => h.Id == hallId);
+
+        private static bool ProjectionIdExists(CinemaContext context, int projectionId)
+           => context.Projections.Any(p => p.Id == projectionId);
 
         private static bool IsValid(object obj)
         {
@@ -198,5 +235,38 @@
 
             return projectionType;
         }
+
+        private static void AddSeatsToContext(int seatsCount, Hall hall, CinemaContext context)
+        {
+            for (int i = 0; i < seatsCount; i++)
+            {
+                var seat = new Seat
+                {
+                    Hall = hall
+                };
+
+                context.Seats.Add(seat);
+            }
+
+            context.SaveChanges();
+        }
+
+        private static void AddTicketsToContext(List<TicketDto> ticketDtos, int customerId, CinemaContext context)
+        {
+            foreach (var dto in ticketDtos)
+            {
+                var ticket = new Ticket
+                {
+                    Price = dto.Price,
+                    ProjectionId = dto.ProjectionId,
+                    CustomerId = customerId
+                };
+
+                context.Tickets.Add(ticket);
+            }
+
+            context.SaveChanges();
+        }
+
     }
 }
