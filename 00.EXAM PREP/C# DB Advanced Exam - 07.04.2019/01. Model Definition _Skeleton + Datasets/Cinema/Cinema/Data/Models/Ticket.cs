@@ -8,7 +8,7 @@
         public int Id { get; set; }
 
         [Required]
-        [Range(typeof(decimal), "0,01", "100000000000000000000")]
+        [Range(typeof(decimal), "0.01", "100000000000000000000")]
         public decimal Price { get; set; }
 
         public int ProjectionId { get; set; }
