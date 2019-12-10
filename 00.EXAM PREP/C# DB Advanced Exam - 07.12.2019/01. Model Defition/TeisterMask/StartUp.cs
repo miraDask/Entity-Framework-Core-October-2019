@@ -13,7 +13,7 @@
         {
             var context = new TeisterMaskContext();
 
-            ResetDatabase(context, shouldDropDatabase: true);
+           ResetDatabase(context, shouldDropDatabase: true);
 
             var projectDir = GetProjectDirectory();
 
